@@ -1,7 +1,7 @@
 #include <MeAuriga.h>
-#include <LmRanger.h>
+#include <LmEncoderOnBoardMotor.h>
 
-Ranger ranger(SLOT_L, SLOT_R);
+EncoderOnBoardMotor motor(SLOT2);
 
 void setup() {
 }
@@ -14,5 +14,5 @@ void loop() {
   digitalWrite(45, LOW);
   delay(750);
 
-  ranger.moveTo(360, 200);
+  motor.moveTo(360, 200);
 }
