@@ -13,9 +13,12 @@
 //! @endcond
 
 #include <LmEncoderOnBoardMotor.h>
+#include <MeRGBLed.h>
 
 #define SLOT_L SLOT2
 #define SLOT_R SLOT1
+// Auriga on-board light ring has 12 LEDs
+#define LEDNUM  12
 
 class Ranger
 {
@@ -24,12 +27,14 @@ class Ranger
 
 		Ranger(int slot_l, int slot_r);
 		void moveTo(long position, float speed = 100);
+		static void Ranger::color_loop();
+		static volatile float j, f, k;
 
 	private:
 
 		EncoderOnBoardMotor MotorL;
 		EncoderOnBoardMotor MotorR;
-
+		static MeRGBLed Ranger::led;
 };
 
 //! @cond SuppressGuard
