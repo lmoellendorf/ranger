@@ -8,18 +8,18 @@
  */
 
 #include "LmRanger.h"
+#include "LmTimer.h"
 
 MeRGBLed Ranger::led(0, LEDNUM);
 volatile float Ranger::j(0), Ranger::f(0), Ranger::k(0);
-volatile int count = 0, t = 0;
+volatile int t = 0;
 
 Ranger::Ranger(int slot_l = SLOT_L, int slot_r = SLOT_R) :
 	MotorL(slot_l), MotorR(slot_r)
 {
 	// on-board LED ring, at PORT0 (onboard)
 	Ranger::led.setpin(44);
-	// enable timer compare interrupt
-	TIMSK0 |= (1 << OCIE0A);
+	Timer::register_callback(Ranger::color_loop);
 }
 
 void Ranger::moveTo(long position, float speed)
@@ -41,10 +41,4 @@ void Ranger::color_loop()
 	k += random(1, 6) / 6.0;
 	t++;
 	t %= LEDNUM;
-}
-
-ISR(TIMER0_COMPA_vect)
-{
-	if (!((count++) % 8))
-		Ranger::color_loop();
 }
