@@ -11,6 +11,7 @@
 
 MeRGBLed Ranger::led(0, LEDNUM);
 volatile float Ranger::j(0), Ranger::f(0), Ranger::k(0);
+volatile int count = 0, t = 0;
 
 Ranger::Ranger(int slot_l = SLOT_L, int slot_r = SLOT_R) :
 	MotorL(slot_l), MotorR(slot_r)
@@ -29,21 +30,21 @@ void Ranger::moveTo(long position, float speed)
 
 void Ranger::color_loop()
 {
-	for (uint8_t t = 0; t < LEDNUM; t++) {
-		uint8_t red	= 64 * (1 + sin(t / 2.0 + j / 4.0));
-		uint8_t green = 64 * (1 + sin(t / 1.0 + f / 9.0 + 2.1));
-		uint8_t blue = 64 * (1 + sin(t / 3.0 + k / 14.0 + 4.2));
-		led.setColorAt(t, red, green, blue);
-	}
+	uint8_t red = 64 * (1 + sin(t / 2.0 + j / 4.0));
+	uint8_t green = 64 * (1 + sin(t / 1.0 + f / 9.0 + 2.1));
+	uint8_t blue = 64 * (1 + sin(t / 3.0 + k / 14.0 + 4.2));
 
+	led.setColorAt(t, red, green, blue);
 	led.show();
-
 	j += random(1, 6) / 6.0;
 	f += random(1, 6) / 6.0;
 	k += random(1, 6) / 6.0;
+	t++;
+	t %= LEDNUM;
 }
 
 ISR(TIMER0_COMPA_vect)
 {
-	Ranger::color_loop();
+	if (!((count++) % 8))
+		Ranger::color_loop();
 }
