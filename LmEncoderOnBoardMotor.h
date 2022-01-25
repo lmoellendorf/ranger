@@ -22,6 +22,7 @@ class EncoderOnBoardMotor
 
 		EncoderOnBoardMotor(int slot);
 		void move_to(long position, float speed = 100);
+		void move_to(long position, float speed, bool sync);
 
 
 	private:
@@ -33,6 +34,7 @@ class EncoderOnBoardMotor
 		static void isr_process_encoder2(void);
 		static void reached_position(int16_t slot, int16_t extID);
 		static void loop(void);
+		static void synced_loop(void);
 		int slot;
 };
 

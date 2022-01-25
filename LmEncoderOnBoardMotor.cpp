@@ -9,6 +9,7 @@
 
 #include "LmEncoderOnBoardMotor.h"
 #include "LmTimer.h"
+#include <math.h>
 
 MeEncoderOnBoard EncoderOnBoardMotor::Encoder1(SLOT1);
 MeEncoderOnBoard EncoderOnBoardMotor::Encoder2(SLOT2);
@@ -60,8 +61,6 @@ EncoderOnBoardMotor::EncoderOnBoardMotor(int slot) : slot(slot)
 		Encoder2.setSpeedPid(0.18, 0, 0);
 		break;
 	}
-
-	Timer::register_callback(loop);
 }
 
 void EncoderOnBoardMotor::reached_position(int16_t slot, int16_t extID)
@@ -85,11 +84,53 @@ void EncoderOnBoardMotor::loop(void)
 	}
 }
 
+void EncoderOnBoardMotor::synced_loop(void)
+{
+	long pos1, pos2;
+
+	pos1 = Encoder1.distanceToGo();
+	pos2 = Encoder2.distanceToGo();
+	pos1 = labs(pos1);
+	pos2 = labs(pos2);
+
+	if (pos_reached[SLOT1] && pos_reached[SLOT2]) {
+		Encoder1.setMotorPwm(0);
+		Encoder2.setMotorPwm(0);
+		return;
+	}
+
+	if (pos1 == pos2) {
+		Encoder1.loop();
+		Encoder2.loop();
+		return;
+	}
+
+	if (pos1 < pos2) {
+		Encoder2.loop();
+		return;
+	}
+
+	if (pos1 > pos2) {
+		Encoder1.loop();
+		return;
+	}
+}
+
 void EncoderOnBoardMotor::move_to(long position, float speed)
+{
+	return move_to(position, speed, false);
+}
+
+void EncoderOnBoardMotor::move_to(long position, float speed, bool sync)
 {
 	int slot = EncoderOnBoardMotor::slot;
 	int i = slot == SLOT1 ? 0 : SLOT2;
 	MeEncoderOnBoard *encoder = slot == SLOT1 ? &Encoder1 : &Encoder2;
+
+	if (sync)
+		Timer::register_callback(synced_loop);
+	else
+		Timer::register_callback(loop);
 
 	pos_reached[i] = false;
 	encoder->move(position, speed, NULL, reached_position);
