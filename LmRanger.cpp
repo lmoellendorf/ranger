@@ -15,12 +15,7 @@ volatile float Ranger::j(0), Ranger::f(0), Ranger::k(0);
 volatile int t = 0;
 
 Ranger::Ranger(int slot_l = SLOT_L, int slot_r = SLOT_R) :
-	MotorL(slot_l), MotorR(slot_r)
-{
-	// on-board LED ring, at PORT0 (onboard)
-	Ranger::led.setpin(44);
-	Timer::register_callback(Ranger::color_loop);
-}
+	MotorL(slot_l), MotorR(slot_r) {}
 
 void Ranger::move_to(long position, float speed)
 {
@@ -41,4 +36,16 @@ void Ranger::color_loop()
 	k += random(1, 6) / 6.0;
 	t++;
 	t %= LEDNUM;
+}
+
+void Ranger::start_rainbow()
+{
+	// on-board LED ring, at PORT0 (onboard)
+	Ranger::led.setpin(44);
+	Timer::register_callback(Ranger::color_loop);
+}
+
+void Ranger::stop_rainbow()
+{
+	Timer::unregister_callback(Ranger::color_loop);
 }

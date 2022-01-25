@@ -29,6 +29,8 @@ class Ranger
 		void move_to(long position, float speed = 100);
 		static void Ranger::color_loop();
 		static volatile float j, f, k;
+		void start_rainbow(void);
+		void stop_rainbow(void);
 
 	private:
 

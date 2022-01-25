@@ -15,4 +15,5 @@ void loop() {
   delay(750);
 
   ranger.move_to(360, 200);
+  ranger.start_rainbow();
 }
