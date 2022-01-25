@@ -13,4 +13,6 @@ void loop() {
   pinMode(45, OUTPUT);
   digitalWrite(45, LOW);
   delay(750);
+
+  ranger.move_to(360, 200);
 }

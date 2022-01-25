@@ -70,7 +70,7 @@ void EncoderOnBoardMotor::reached_position(int16_t slot, int16_t extID)
 }
 
 
-void EncoderOnBoardMotor::moveTo(long position, float speed)
+void EncoderOnBoardMotor::move_to(long position, float speed)
 {
 	int slot = EncoderOnBoardMotor::slot;
 	int i = slot == SLOT1 ? 0 : SLOT2;

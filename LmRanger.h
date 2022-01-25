@@ -26,7 +26,7 @@ class Ranger
 	public:
 
 		Ranger(int slot_l, int slot_r);
-		void moveTo(long position, float speed = 100);
+		void move_to(long position, float speed = 100);
 		static void Ranger::color_loop();
 		static volatile float j, f, k;
 

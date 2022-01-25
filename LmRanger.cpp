@@ -22,10 +22,10 @@ Ranger::Ranger(int slot_l = SLOT_L, int slot_r = SLOT_R) :
 	Timer::register_callback(Ranger::color_loop);
 }
 
-void Ranger::moveTo(long position, float speed)
+void Ranger::move_to(long position, float speed)
 {
-	Ranger::MotorL.moveTo(position, speed);
-	Ranger::MotorR.moveTo(-position, speed);
+	Ranger::MotorL.move_to(position, speed);
+	Ranger::MotorR.move_to(-position, speed);
 }
 
 void Ranger::color_loop()
