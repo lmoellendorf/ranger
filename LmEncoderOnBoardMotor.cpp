@@ -8,6 +8,7 @@
  */
 
 #include "LmEncoderOnBoardMotor.h"
+#include "LmTimer.h"
 
 MeEncoderOnBoard EncoderOnBoardMotor::Encoder1(SLOT1);
 MeEncoderOnBoard EncoderOnBoardMotor::Encoder2(SLOT2);
@@ -60,6 +61,7 @@ EncoderOnBoardMotor::EncoderOnBoardMotor(int slot) : slot(slot)
 		break;
 	}
 
+	Timer::register_callback(loop);
 }
 
 void EncoderOnBoardMotor::reached_position(int16_t slot, int16_t extID)
@@ -69,6 +71,19 @@ void EncoderOnBoardMotor::reached_position(int16_t slot, int16_t extID)
 	pos_reached[i] = true;
 }
 
+void EncoderOnBoardMotor::loop(void)
+{
+	MeEncoderOnBoard *encoder;
+
+	for (int slot; slot < 2; slot++) {
+		encoder = slot == SLOT1 ? &Encoder1 : &Encoder2;
+
+		if (!pos_reached[slot])
+			encoder->loop();
+		else
+			encoder->setMotorPwm(0);
+	}
+}
 
 void EncoderOnBoardMotor::move_to(long position, float speed)
 {
@@ -78,9 +93,4 @@ void EncoderOnBoardMotor::move_to(long position, float speed)
 
 	pos_reached[i] = false;
 	encoder->move(position, speed, NULL, reached_position);
-
-	while (!pos_reached[i])
-		encoder->loop();
-
-	encoder->setMotorPwm(0);
 }

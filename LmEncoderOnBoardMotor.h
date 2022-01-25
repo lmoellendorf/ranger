@@ -32,6 +32,7 @@ class EncoderOnBoardMotor
 		static void isr_process_encoder1(void);
 		static void isr_process_encoder2(void);
 		static void reached_position(int16_t slot, int16_t extID);
+		static void loop(void);
 		int slot;
 };
 
