@@ -21,8 +21,8 @@ class EncoderOnBoardMotor
 	public:
 
 		EncoderOnBoardMotor(int slot);
-		void MoveTo(long position, float speed = 100);
-		void MoveTo(long position, float speed, bool sync);
+		void RotateTo(long position, float speed = 100);
+		void RotateTo(long position, float speed, bool sync);
 
 
 	private:

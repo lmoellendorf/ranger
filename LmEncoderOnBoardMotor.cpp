@@ -116,12 +116,12 @@ void EncoderOnBoardMotor::LoopSynced(void)
 	}
 }
 
-void EncoderOnBoardMotor::MoveTo(long position, float speed)
+void EncoderOnBoardMotor::RotateTo(long position, float speed)
 {
-	return MoveTo(position, speed, false);
+	return RotateTo(position, speed, false);
 }
 
-void EncoderOnBoardMotor::MoveTo(long position, float speed, bool sync)
+void EncoderOnBoardMotor::RotateTo(long position, float speed, bool sync)
 {
 	int slot = EncoderOnBoardMotor::slot;
 	int i = slot == SLOT1 ? 0 : SLOT2;
