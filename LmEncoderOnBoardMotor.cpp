@@ -165,9 +165,10 @@ void EncoderOnBoardMotor::RotateTo(long position, float speed, bool block,
 	int i = (slot == SLOT1 ? 0 : 1);
 	MeEncoderOnBoard *encoder = slot == SLOT1 ? &encoder1 : &encoder2;
 
-	if (block)
+	if (block) {
 		Timer::UnregisterCallback(i ? Loop2 : Loop1);
-	else {
+		Timer::UnregisterCallback(LoopSynced);
+	} else {
 		if (sync)
 			Timer::RegisterCallback(LoopSynced);
 		else
@@ -178,9 +179,17 @@ void EncoderOnBoardMotor::RotateTo(long position, float speed, bool block,
 	encoder->move(position, speed, NULL, PositionReached);
 
 	if (block) {
-		while (!IsPositionReached(i))
-			encoder->loop();
+		while (!IsPositionReached(i)) {
+			if (sync)
+				LoopSynced();
+			else
+				encoder->loop();
+		}
 
-		encoder->setMotorPwm(0);
+		if (sync) {
+			encoder1.setMotorPwm(0);
+			encoder2.setMotorPwm(0);
+		} else
+			encoder->setMotorPwm(0);
 	}
 }
