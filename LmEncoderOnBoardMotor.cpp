@@ -128,9 +128,9 @@ void EncoderOnBoardMotor::MoveTo(long position, float speed, bool sync)
 	MeEncoderOnBoard *encoder = slot == SLOT1 ? &encoder1 : &encoder2;
 
 	if (sync)
-		Timer::register_callback(LoopSynced);
+		Timer::RegisterCallback(LoopSynced);
 	else
-		Timer::register_callback(Loop);
+		Timer::RegisterCallback(Loop);
 
 	pos_reached[i] = false;
 	encoder->move(position, speed, NULL, PositionReached);

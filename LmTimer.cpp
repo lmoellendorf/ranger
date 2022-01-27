@@ -17,7 +17,7 @@ timer_cb Timer::callbacks[n_cb] = {0};
 int Timer::cb_count(0);
 int Timer::counter(0);
 
-void Timer::register_callback(timer_cb callback)
+void Timer::RegisterCallback(timer_cb callback)
 {
 	for (int cb = 0; cb < n_cb; cb++) {
 		if (callbacks[cb]) {
@@ -35,7 +35,7 @@ void Timer::register_callback(timer_cb callback)
 	}
 }
 
-void Timer::unregister_callback(timer_cb callback)
+void Timer::UnregisterCallback(timer_cb callback)
 {
 	for (int cb = 0; cb < n_cb; cb++) {
 		if (callbacks[cb] != callback)

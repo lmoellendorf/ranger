@@ -42,10 +42,10 @@ void Ranger::StartRainbow()
 {
 	// on-board LED ring, at PORT0 (onboard)
 	Ranger::led.setpin(44);
-	Timer::register_callback(Ranger::ColorLoop);
+	Timer::RegisterCallback(Ranger::ColorLoop);
 }
 
 void Ranger::StopRainbow()
 {
-	Timer::unregister_callback(Ranger::ColorLoop);
+	Timer::UnregisterCallback(Ranger::ColorLoop);
 }

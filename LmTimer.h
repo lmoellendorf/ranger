@@ -22,8 +22,8 @@ class Timer
 
 	public:
 
-		static void register_callback(timer_cb callback);
-		static void unregister_callback(timer_cb callback);
+		static void RegisterCallback(timer_cb callback);
+		static void UnregisterCallback(timer_cb callback);
 		static timer_cb callbacks[n_cb];
 		static int cb_count, counter;
 
