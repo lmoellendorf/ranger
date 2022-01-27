@@ -14,6 +14,6 @@ void loop() {
   digitalWrite(45, LOW);
   delay(750);
 
-  ranger.move_to(6000, 200);
-  ranger.start_rainbow();
+  ranger.MoveTo(6000, 200);
+  ranger.StartRainbow();
 }

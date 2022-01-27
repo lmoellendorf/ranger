@@ -15,15 +15,15 @@ volatile float Ranger::j(0), Ranger::f(0), Ranger::k(0);
 volatile int t = 0;
 
 Ranger::Ranger(int slot_l = SLOT_L, int slot_r = SLOT_R) :
-	MotorL(slot_l), MotorR(slot_r) {}
+	motor_l(slot_l), motor_r(slot_r) {}
 
-void Ranger::move_to(long position, float speed)
+void Ranger::MoveTo(long position, float speed)
 {
-	Ranger::MotorL.MoveTo(position, speed, true);
-	Ranger::MotorR.MoveTo(-position, speed, true);
+	Ranger::motor_l.MoveTo(position, speed, true);
+	Ranger::motor_r.MoveTo(-position, speed, true);
 }
 
-void Ranger::color_loop()
+void Ranger::ColorLoop()
 {
 	uint8_t red = 64 * (1 + sin(t / 2.0 + j / 4.0));
 	uint8_t green = 64 * (1 + sin(t / 1.0 + f / 9.0 + 2.1));
@@ -38,14 +38,14 @@ void Ranger::color_loop()
 	t %= LEDNUM;
 }
 
-void Ranger::start_rainbow()
+void Ranger::StartRainbow()
 {
 	// on-board LED ring, at PORT0 (onboard)
 	Ranger::led.setpin(44);
-	Timer::register_callback(Ranger::color_loop);
+	Timer::register_callback(Ranger::ColorLoop);
 }
 
-void Ranger::stop_rainbow()
+void Ranger::StopRainbow()
 {
-	Timer::unregister_callback(Ranger::color_loop);
+	Timer::unregister_callback(Ranger::ColorLoop);
 }

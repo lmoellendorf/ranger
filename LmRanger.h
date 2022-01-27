@@ -26,17 +26,17 @@ class Ranger
 	public:
 
 		Ranger(int slot_l, int slot_r);
-		void move_to(long position, float speed = 100);
-		static void Ranger::color_loop();
-		static volatile float j, f, k;
-		void start_rainbow(void);
-		void stop_rainbow(void);
+		void MoveTo(long position, float speed = 100);
+		void StartRainbow(void);
+		void StopRainbow(void);
 
 	private:
 
-		EncoderOnBoardMotor MotorL;
-		EncoderOnBoardMotor MotorR;
-		static MeRGBLed Ranger::led;
+		EncoderOnBoardMotor motor_l;
+		EncoderOnBoardMotor motor_r;
+		static MeRGBLed led;
+		static volatile float j, f, k;
+		static void ColorLoop();
 };
 
 //! @cond SuppressGuard
