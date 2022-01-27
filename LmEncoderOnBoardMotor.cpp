@@ -193,3 +193,10 @@ void EncoderOnBoardMotor::RotateTo(long position, float speed, bool block,
 			encoder->setMotorPwm(0);
 	}
 }
+
+void EncoderOnBoardMotor::Stop(void)
+{
+	MeEncoderOnBoard *encoder = slot == SLOT1 ? &encoder1 : &encoder2;
+
+	encoder->setMotorPwm(0);
+}

@@ -37,4 +37,10 @@ void loop()
 	//Rotate and block until position is reached synchronized
 	motor_l.RotateTo(360, 200, false, true);
 	motor_r.RotateTo(360, 200, true, true);
+
+	while (1) {
+		HeartBeat();
+		motor_l.Stop();
+		motor_r.Stop();
+	}
 }
