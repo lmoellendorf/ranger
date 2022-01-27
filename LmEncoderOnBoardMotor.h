@@ -22,7 +22,8 @@ class EncoderOnBoardMotor
 
 		EncoderOnBoardMotor(int slot);
 		void RotateTo(long position, float speed = 100);
-		void RotateTo(long position, float speed, bool sync);
+		void RotateTo(long position, float speed, bool block);
+		void RotateTo(long position, float speed, bool block, bool sync);
 
 
 	private:
@@ -30,6 +31,7 @@ class EncoderOnBoardMotor
 		static MeEncoderOnBoard encoder1;
 		static MeEncoderOnBoard encoder2;
 		static bool pos_reached[2];
+		static volatile bool blocked[2];
 		static void IsrProcessEncoder1(void);
 		static void IsrProcessEncoder2(void);
 		static void PositionReached(int16_t slot, int16_t ext_id);

@@ -14,6 +14,7 @@
 MeEncoderOnBoard EncoderOnBoardMotor::encoder1(SLOT1);
 MeEncoderOnBoard EncoderOnBoardMotor::encoder2(SLOT2);
 bool EncoderOnBoardMotor::pos_reached[] = { false, false };
+volatile bool EncoderOnBoardMotor::blocked[] = { false, false };
 
 void EncoderOnBoardMotor::IsrProcessEncoder1(void)
 {
@@ -68,6 +69,7 @@ void EncoderOnBoardMotor::PositionReached(int16_t slot, int16_t ext_id)
 	int i = (slot == SLOT1 ? 0 : 1);
 
 	pos_reached[i] = true;
+	//blocked[i] = false;
 }
 
 void EncoderOnBoardMotor::Loop(void)
@@ -79,8 +81,10 @@ void EncoderOnBoardMotor::Loop(void)
 
 		if (!pos_reached[slot])
 			encoder->loop();
-		else
+		else {
 			encoder->setMotorPwm(0);
+			blocked[slot] = false;
+		}
 	}
 }
 
@@ -118,20 +122,33 @@ void EncoderOnBoardMotor::LoopSynced(void)
 
 void EncoderOnBoardMotor::RotateTo(long position, float speed)
 {
-	return RotateTo(position, speed, false);
+	return RotateTo(position, speed, false, false);
 }
 
-void EncoderOnBoardMotor::RotateTo(long position, float speed, bool sync)
+void EncoderOnBoardMotor::RotateTo(long position, float speed, bool block)
+{
+	return RotateTo(position, speed, block, false);
+}
+
+void EncoderOnBoardMotor::RotateTo(long position, float speed, bool block,
+				   bool sync)
 {
 	int slot = EncoderOnBoardMotor::slot;
 	int i = (slot == SLOT1 ? 0 : 1);
 	MeEncoderOnBoard *encoder = slot == SLOT1 ? &encoder1 : &encoder2;
 
-	if (sync)
-		Timer::RegisterCallback(LoopSynced);
-	else
-		Timer::RegisterCallback(Loop);
+	if ((block && !blocked[i]) || !block) {
 
-	pos_reached[i] = false;
-	encoder->move(position, speed, NULL, PositionReached);
+		if (sync)
+			Timer::RegisterCallback(LoopSynced);
+		else
+			Timer::RegisterCallback(Loop);
+
+		pos_reached[i] = false;
+		encoder->move(position, speed, NULL, PositionReached);
+		blocked[i] = true;
+	}
+
+	while (block && blocked[i])
+		Loop();
 }
