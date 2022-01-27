@@ -12,6 +12,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stddef.h>
+#include <Arduino.h>
 
 timer_cb Timer::callbacks[n_cb] = {0};
 int Timer::cb_count(0);
@@ -29,8 +30,10 @@ void Timer::RegisterCallback(timer_cb callback)
 
 		// enable timer compare interrupt
 		TIMSK0 |= (1 << OCIE0A);
+		noInterrupts();
 		callbacks[cb] = callback;
 		cb_count++;
+		interrupts();
 		return;
 	}
 }
@@ -41,8 +44,10 @@ void Timer::UnregisterCallback(timer_cb callback)
 		if (callbacks[cb] != callback)
 			continue;
 
+		noInterrupts();
 		callbacks[cb] = NULL;
 		cb_count--;
+		interrupts();
 	}
 }
 
