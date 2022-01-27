@@ -21,20 +21,20 @@ class EncoderOnBoardMotor
 	public:
 
 		EncoderOnBoardMotor(int slot);
-		void move_to(long position, float speed = 100);
-		void move_to(long position, float speed, bool sync);
+		void MoveTo(long position, float speed = 100);
+		void MoveTo(long position, float speed, bool sync);
 
 
 	private:
 
-		static MeEncoderOnBoard Encoder1;
-		static MeEncoderOnBoard Encoder2;
+		static MeEncoderOnBoard encoder1;
+		static MeEncoderOnBoard encoder2;
 		static bool pos_reached[2];
-		static void isr_process_encoder1(void);
-		static void isr_process_encoder2(void);
-		static void reached_position(int16_t slot, int16_t extID);
-		static void loop(void);
-		static void synced_loop(void);
+		static void IsrProcessEncoder1(void);
+		static void IsrProcessEncoder2(void);
+		static void PositionReached(int16_t slot, int16_t ext_id);
+		static void Loop(void);
+		static void LoopSynced(void);
 		int slot;
 };
 

@@ -11,24 +11,24 @@
 #include "LmTimer.h"
 #include <math.h>
 
-MeEncoderOnBoard EncoderOnBoardMotor::Encoder1(SLOT1);
-MeEncoderOnBoard EncoderOnBoardMotor::Encoder2(SLOT2);
+MeEncoderOnBoard EncoderOnBoardMotor::encoder1(SLOT1);
+MeEncoderOnBoard EncoderOnBoardMotor::encoder2(SLOT2);
 bool EncoderOnBoardMotor::pos_reached[] = { false, false };
 
-void EncoderOnBoardMotor::isr_process_encoder1(void)
+void EncoderOnBoardMotor::IsrProcessEncoder1(void)
 {
-	if (digitalRead(Encoder1.getPortB()) == 0)
-		Encoder1.pulsePosMinus();
+	if (digitalRead(encoder1.getPortB()) == 0)
+		encoder1.pulsePosMinus();
 	else
-		Encoder1.pulsePosPlus();
+		encoder1.pulsePosPlus();
 }
 
-void EncoderOnBoardMotor::isr_process_encoder2(void)
+void EncoderOnBoardMotor::IsrProcessEncoder2(void)
 {
-	if (digitalRead(Encoder2.getPortB()) == 0)
-		Encoder2.pulsePosMinus();
+	if (digitalRead(encoder2.getPortB()) == 0)
+		encoder2.pulsePosMinus();
 	else
-		Encoder2.pulsePosPlus();
+		encoder2.pulsePosPlus();
 }
 
 EncoderOnBoardMotor::EncoderOnBoardMotor(int slot) : slot(slot)
@@ -43,39 +43,39 @@ EncoderOnBoardMotor::EncoderOnBoardMotor(int slot) : slot(slot)
 	//Encoder.reset(slot);
 	switch (slot) {
 	case SLOT1:
-		attachInterrupt(Encoder1.getIntNum(), isr_process_encoder1, RISING);
-		Encoder1.setPulse(9);
-		Encoder1.setRatio(39.267);
-		Encoder1.setPosPid(1.8, 0, 1.2);
-		Encoder1.setSpeedPid(0.18, 0, 0);
+		attachInterrupt(encoder1.getIntNum(), IsrProcessEncoder1, RISING);
+		encoder1.setPulse(9);
+		encoder1.setRatio(39.267);
+		encoder1.setPosPid(1.8, 0, 1.2);
+		encoder1.setSpeedPid(0.18, 0, 0);
 		break;
 
 	case SLOT2:
 
 	/** fall through */
 	default:
-		attachInterrupt(Encoder2.getIntNum(), isr_process_encoder2, RISING);
-		Encoder2.setPulse(9);
-		Encoder2.setRatio(39.267);
-		Encoder2.setPosPid(1.8, 0, 1.2);
-		Encoder2.setSpeedPid(0.18, 0, 0);
+		attachInterrupt(encoder2.getIntNum(), IsrProcessEncoder2, RISING);
+		encoder2.setPulse(9);
+		encoder2.setRatio(39.267);
+		encoder2.setPosPid(1.8, 0, 1.2);
+		encoder2.setSpeedPid(0.18, 0, 0);
 		break;
 	}
 }
 
-void EncoderOnBoardMotor::reached_position(int16_t slot, int16_t extID)
+void EncoderOnBoardMotor::PositionReached(int16_t slot, int16_t ext_id)
 {
 	int i = slot == SLOT1 ? 0 : SLOT2;
 
 	pos_reached[i] = true;
 }
 
-void EncoderOnBoardMotor::loop(void)
+void EncoderOnBoardMotor::Loop(void)
 {
 	MeEncoderOnBoard *encoder;
 
 	for (int slot; slot < 2; slot++) {
-		encoder = slot == SLOT1 ? &Encoder1 : &Encoder2;
+		encoder = slot == SLOT1 ? &encoder1 : &encoder2;
 
 		if (!pos_reached[slot])
 			encoder->loop();
@@ -84,54 +84,54 @@ void EncoderOnBoardMotor::loop(void)
 	}
 }
 
-void EncoderOnBoardMotor::synced_loop(void)
+void EncoderOnBoardMotor::LoopSynced(void)
 {
 	long pos1, pos2;
 
-	pos1 = Encoder1.distanceToGo();
-	pos2 = Encoder2.distanceToGo();
+	pos1 = encoder1.distanceToGo();
+	pos2 = encoder2.distanceToGo();
 	pos1 = labs(pos1);
 	pos2 = labs(pos2);
 
 	if (pos_reached[SLOT1] && pos_reached[SLOT2]) {
-		Encoder1.setMotorPwm(0);
-		Encoder2.setMotorPwm(0);
+		encoder1.setMotorPwm(0);
+		encoder2.setMotorPwm(0);
 		return;
 	}
 
 	if (pos1 == pos2) {
-		Encoder1.loop();
-		Encoder2.loop();
+		encoder1.loop();
+		encoder2.loop();
 		return;
 	}
 
 	if (pos1 < pos2) {
-		Encoder2.loop();
+		encoder2.loop();
 		return;
 	}
 
 	if (pos1 > pos2) {
-		Encoder1.loop();
+		encoder1.loop();
 		return;
 	}
 }
 
-void EncoderOnBoardMotor::move_to(long position, float speed)
+void EncoderOnBoardMotor::MoveTo(long position, float speed)
 {
-	return move_to(position, speed, false);
+	return MoveTo(position, speed, false);
 }
 
-void EncoderOnBoardMotor::move_to(long position, float speed, bool sync)
+void EncoderOnBoardMotor::MoveTo(long position, float speed, bool sync)
 {
 	int slot = EncoderOnBoardMotor::slot;
 	int i = slot == SLOT1 ? 0 : SLOT2;
-	MeEncoderOnBoard *encoder = slot == SLOT1 ? &Encoder1 : &Encoder2;
+	MeEncoderOnBoard *encoder = slot == SLOT1 ? &encoder1 : &encoder2;
 
 	if (sync)
-		Timer::register_callback(synced_loop);
+		Timer::register_callback(LoopSynced);
 	else
-		Timer::register_callback(loop);
+		Timer::register_callback(Loop);
 
 	pos_reached[i] = false;
-	encoder->move(position, speed, NULL, reached_position);
+	encoder->move(position, speed, NULL, PositionReached);
 }

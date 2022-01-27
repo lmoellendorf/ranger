@@ -19,8 +19,8 @@ Ranger::Ranger(int slot_l = SLOT_L, int slot_r = SLOT_R) :
 
 void Ranger::move_to(long position, float speed)
 {
-	Ranger::MotorL.move_to(position, speed, true);
-	Ranger::MotorR.move_to(-position, speed, true);
+	Ranger::MotorL.MoveTo(position, speed, true);
+	Ranger::MotorR.MoveTo(-position, speed, true);
 }
 
 void Ranger::color_loop()

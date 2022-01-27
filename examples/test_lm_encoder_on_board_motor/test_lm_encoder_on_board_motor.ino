@@ -14,5 +14,5 @@ void loop() {
   digitalWrite(45, LOW);
   delay(750);
 
-  motor.move_to(360, 200);
+  motor.MoveTo(360, 200);
 }
