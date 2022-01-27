@@ -65,7 +65,7 @@ EncoderOnBoardMotor::EncoderOnBoardMotor(int slot) : slot(slot)
 
 void EncoderOnBoardMotor::PositionReached(int16_t slot, int16_t ext_id)
 {
-	int i = slot == SLOT1 ? 0 : SLOT2;
+	int i = (slot == SLOT1 ? 0 : 1);
 
 	pos_reached[i] = true;
 }
@@ -93,7 +93,7 @@ void EncoderOnBoardMotor::LoopSynced(void)
 	pos1 = labs(pos1);
 	pos2 = labs(pos2);
 
-	if (pos_reached[SLOT1] && pos_reached[SLOT2]) {
+	if (pos_reached[0] && pos_reached[1]) {
 		encoder1.setMotorPwm(0);
 		encoder2.setMotorPwm(0);
 		return;
@@ -124,7 +124,7 @@ void EncoderOnBoardMotor::RotateTo(long position, float speed)
 void EncoderOnBoardMotor::RotateTo(long position, float speed, bool sync)
 {
 	int slot = EncoderOnBoardMotor::slot;
-	int i = slot == SLOT1 ? 0 : SLOT2;
+	int i = (slot == SLOT1 ? 0 : 1);
 	MeEncoderOnBoard *encoder = slot == SLOT1 ? &encoder1 : &encoder2;
 
 	if (sync)
