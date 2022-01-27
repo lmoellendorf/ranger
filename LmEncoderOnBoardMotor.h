@@ -31,11 +31,14 @@ class EncoderOnBoardMotor
 		static MeEncoderOnBoard encoder1;
 		static MeEncoderOnBoard encoder2;
 		static bool pos_reached[2];
-		static volatile bool blocked[2];
 		static void IsrProcessEncoder1(void);
 		static void IsrProcessEncoder2(void);
 		static void PositionReached(int16_t slot, int16_t ext_id);
-		static void Loop(void);
+		static bool IsPositionReached(int16_t slot);
+		static bool ArePositionsReached(void);
+		static void ResetPositionReached(int16_t slot);
+		static void Loop1(void);
+		static void Loop2(void);
 		static void LoopSynced(void);
 		int slot;
 };

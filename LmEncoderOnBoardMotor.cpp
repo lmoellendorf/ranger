@@ -14,7 +14,6 @@
 MeEncoderOnBoard EncoderOnBoardMotor::encoder1(SLOT1);
 MeEncoderOnBoard EncoderOnBoardMotor::encoder2(SLOT2);
 bool EncoderOnBoardMotor::pos_reached[] = { false, false };
-volatile bool EncoderOnBoardMotor::blocked[] = { false, false };
 
 void EncoderOnBoardMotor::IsrProcessEncoder1(void)
 {
@@ -69,23 +68,52 @@ void EncoderOnBoardMotor::PositionReached(int16_t slot, int16_t ext_id)
 	int i = (slot == SLOT1 ? 0 : 1);
 
 	pos_reached[i] = true;
-	//blocked[i] = false;
 }
 
-void EncoderOnBoardMotor::Loop(void)
+bool EncoderOnBoardMotor::IsPositionReached(int16_t slot)
 {
-	MeEncoderOnBoard *encoder;
+	int i = (slot == SLOT1 ? 0 : 1);
+	bool ret;
 
-	for (int slot; slot < 2; slot++) {
-		encoder = slot == SLOT1 ? &encoder1 : &encoder2;
+	noInterrupts();
+	ret = pos_reached[i];
+	interrupts();
+	return ret;
+}
 
-		if (!pos_reached[slot])
-			encoder->loop();
-		else {
-			encoder->setMotorPwm(0);
-			blocked[slot] = false;
-		}
-	}
+void EncoderOnBoardMotor::ResetPositionReached(int16_t slot)
+{
+	int i = (slot == SLOT1 ? 0 : 1);
+
+	noInterrupts();
+	pos_reached[i] = false;
+	interrupts();
+}
+
+bool EncoderOnBoardMotor::ArePositionsReached(void)
+{
+	bool ret;
+
+	noInterrupts();
+	ret = pos_reached[0] && pos_reached[1];
+	interrupts();
+	return ret;
+}
+
+void EncoderOnBoardMotor::Loop1(void)
+{
+	if (!pos_reached[0])
+		encoder1.loop();
+	else
+		encoder1.setMotorPwm(0);
+}
+
+void EncoderOnBoardMotor::Loop2(void)
+{
+	if (!pos_reached[1])
+		encoder2.loop();
+	else
+		encoder2.setMotorPwm(0);
 }
 
 void EncoderOnBoardMotor::LoopSynced(void)
@@ -137,18 +165,22 @@ void EncoderOnBoardMotor::RotateTo(long position, float speed, bool block,
 	int i = (slot == SLOT1 ? 0 : 1);
 	MeEncoderOnBoard *encoder = slot == SLOT1 ? &encoder1 : &encoder2;
 
-	if ((block && !blocked[i]) || !block) {
-
+	if (block)
+		Timer::UnregisterCallback(i ? Loop2 : Loop1);
+	else {
 		if (sync)
 			Timer::RegisterCallback(LoopSynced);
 		else
-			Timer::RegisterCallback(Loop);
-
-		pos_reached[i] = false;
-		encoder->move(position, speed, NULL, PositionReached);
-		blocked[i] = true;
+			Timer::RegisterCallback(i ? Loop2 : Loop1);
 	}
 
-	while (block && blocked[i])
-		Loop();
+	ResetPositionReached(i);
+	encoder->move(position, speed, NULL, PositionReached);
+
+	if (block) {
+		while (!IsPositionReached(i))
+			encoder->loop();
+
+		encoder->setMotorPwm(0);
+	}
 }
