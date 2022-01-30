@@ -1,10 +1,12 @@
 #include <MeAuriga.h>
 #include <LmRanger.h>
+#include <LmLedRing.h>
 
 Ranger ranger(SLOT_L, SLOT_R);
 
 void setup()
 {
+	LedRing::StartRainbow();
 }
 
 void loop()
@@ -17,5 +19,4 @@ void loop()
 	delay(750);
 
 	ranger.MoveTo(6000, 200);
-	ranger.StartRainbow();
 }
