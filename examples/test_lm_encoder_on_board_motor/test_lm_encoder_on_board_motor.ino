@@ -13,7 +13,6 @@ void HeartBeat(void)
 	pinMode(45, OUTPUT);
 	digitalWrite(45, HIGH);
 	delay(333);
-	pinMode(45, OUTPUT);
 	digitalWrite(45, LOW);
 	delay(666);
 }
