@@ -30,6 +30,15 @@ void loop()
 
 	HeartBeat();
 
+	//Do not block
+	motor_l.RotateTo(360, 200);
+	motor_r.RotateTo(-360, 200);
+	delay(333);
+	motor_l.Stop();
+	motor_r.Stop();
+	HeartBeat();
+	delay(333);
+
 	while (1) {
 		HeartBeat();
 		motor_l.Stop();

@@ -105,7 +105,7 @@ void EncoderOnBoardMotor::Loop1(void)
 	if (!pos_reached[0])
 		encoder1.loop();
 	else
-		encoder1.setMotorPwm(0);
+		encoder1.runSpeed(0);
 }
 
 void EncoderOnBoardMotor::Loop2(void)
@@ -113,7 +113,7 @@ void EncoderOnBoardMotor::Loop2(void)
 	if (!pos_reached[1])
 		encoder2.loop();
 	else
-		encoder2.setMotorPwm(0);
+		encoder2.runSpeed(0);
 }
 
 void EncoderOnBoardMotor::LoopSynced(void)
@@ -198,5 +198,5 @@ void EncoderOnBoardMotor::Stop(void)
 {
 	MeEncoderOnBoard *encoder = slot == SLOT1 ? &encoder1 : &encoder2;
 
-	encoder->setMotorPwm(0);
+	encoder->runSpeed(0);
 }
