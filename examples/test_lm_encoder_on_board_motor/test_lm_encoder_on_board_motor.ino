@@ -39,6 +39,10 @@ void loop()
 	HeartBeat();
 	delay(333);
 
+	motor_l.Forward(100);
+	motor_r.Forward(-100);
+	delay(3000);
+
 	while (1) {
 		HeartBeat();
 		motor_l.Stop();

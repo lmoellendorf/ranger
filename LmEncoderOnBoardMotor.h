@@ -23,6 +23,7 @@ class EncoderOnBoardMotor
 		EncoderOnBoardMotor(int slot);
 		void RotateTo(long position, float speed = 100);
 		void RotateTo(long position, float speed, bool block);
+		void Forward(float speed);
 		void Stop(void);
 
 

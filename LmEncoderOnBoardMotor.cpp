@@ -194,6 +194,17 @@ void EncoderOnBoardMotor::RotateTo(long position, float speed, bool block,
 	}
 }
 
+void EncoderOnBoardMotor::Forward(float speed)
+{
+	int slot = EncoderOnBoardMotor::slot;
+	int i = (slot == SLOT1 ? 0 : 1);
+	MeEncoderOnBoard *encoder = slot == SLOT1 ? &encoder1 : &encoder2;
+
+	ResetPositionReached(i);
+	Timer::RegisterCallback(i ? Loop2: Loop1);
+	encoder->runSpeed(speed);
+}
+
 void EncoderOnBoardMotor::Stop(void)
 {
 	MeEncoderOnBoard *encoder = slot == SLOT1 ? &encoder1 : &encoder2;
