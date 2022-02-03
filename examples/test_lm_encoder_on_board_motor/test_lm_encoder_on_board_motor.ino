@@ -10,10 +10,9 @@ void setup()
 
 void HeartBeat(void)
 {
-	pinMode(45, OUTPUT);
-	digitalWrite(45, HIGH);
+	buzzerOn();
 	delay(333);
-	digitalWrite(45, LOW);
+	buzzerOff();
 	delay(666);
 }
 
