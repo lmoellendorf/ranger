@@ -23,7 +23,6 @@ class EncoderOnBoardMotor
 		EncoderOnBoardMotor(int slot);
 		void RotateTo(long position, float speed = 100);
 		void RotateTo(long position, float speed, bool block);
-		void RotateTo(long position, float speed, bool block, bool sync);
 		void Stop(void);
 
 
@@ -42,6 +41,8 @@ class EncoderOnBoardMotor
 		static void Loop2(void);
 		static void LoopSynced(void);
 		int slot;
+		//FIXME
+		void RotateTo(long position, float speed, bool block, bool sync);
 };
 
 //! @cond SuppressGuard
