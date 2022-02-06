@@ -10,10 +10,12 @@
 #include "LmEncoderOnBoardMotor.h"
 #include "LmTimer.h"
 #include <math.h>
+#include <float.h>
 
 MeEncoderOnBoard EncoderOnBoardMotor::encoder1(SLOT1);
 MeEncoderOnBoard EncoderOnBoardMotor::encoder2(SLOT2);
 bool EncoderOnBoardMotor::pos_reached[] = { false, false };
+bool EncoderOnBoardMotor::synced = false;
 
 void EncoderOnBoardMotor::IsrProcessEncoder1(void)
 {
@@ -105,52 +107,58 @@ bool EncoderOnBoardMotor::ArePositionsReached(void)
 	return ret;
 }
 
+void EncoderOnBoardMotor::SetSynced(bool on)
+{
+	noInterrupts();
+	synced = on;
+	interrupts();
+}
+
+bool EncoderOnBoardMotor::GetSynced(void)
+{
+	bool ret;
+
+	noInterrupts();
+	ret = synced;
+	interrupts();
+	return ret;
+}
+
+void EncoderOnBoardMotor::syncCurrentSpeed(void)
+{
+	float speed;
+
+	if (GetSynced()) {
+		speed = encoder1.getCurrentSpeed();
+
+		if (encoder1.distanceToGo() > encoder2.distanceToGo()) {
+			/* increment without overflow */
+			speed += speed <= FLT_MAX - 1 ? 1 : 0;
+			encoder1.setCurrentSpeed(speed);
+		} else if (encoder1.distanceToGo() < encoder2.distanceToGo()) {
+			/* decrement without becoming negative */
+			speed -= speed >= 1 ? 1 : 0;
+			encoder1.setCurrentSpeed(speed--);
+		}
+	}
+}
+
 void EncoderOnBoardMotor::Loop1(void)
 {
-	if (!pos_reached[0])
+	if (!pos_reached[0]) {
+		syncCurrentSpeed();
 		encoder1.loop();
-	else
+	} else
 		encoder1.runSpeed(0);
 }
 
 void EncoderOnBoardMotor::Loop2(void)
 {
-	if (!pos_reached[1])
+	if (!pos_reached[1]) {
+		syncCurrentSpeed();
 		encoder2.loop();
-	else
+	} else
 		encoder2.runSpeed(0);
-}
-
-void EncoderOnBoardMotor::LoopSynced(void)
-{
-	long pos1, pos2;
-
-	pos1 = encoder1.distanceToGo();
-	pos2 = encoder2.distanceToGo();
-	pos1 = labs(pos1);
-	pos2 = labs(pos2);
-
-	if (pos_reached[0] && pos_reached[1]) {
-		encoder1.setMotorPwm(0);
-		encoder2.setMotorPwm(0);
-		return;
-	}
-
-	if (pos1 == pos2) {
-		encoder1.loop();
-		encoder2.loop();
-		return;
-	}
-
-	if (pos1 < pos2) {
-		encoder2.loop();
-		return;
-	}
-
-	if (pos1 > pos2) {
-		encoder1.loop();
-		return;
-	}
 }
 
 void EncoderOnBoardMotor::RotateTo(long position, float speed)
@@ -170,32 +178,27 @@ void EncoderOnBoardMotor::RotateTo(long position, float speed, bool block,
 	int i = (slot == SLOT1 ? 0 : 1);
 	MeEncoderOnBoard *encoder = slot == SLOT1 ? &encoder1 : &encoder2;
 
-	if (block) {
+	if (block)
 		Timer::UnregisterCallback(i ? Loop2 : Loop1);
-		Timer::UnregisterCallback(LoopSynced);
-	} else {
-		if (sync)
-			Timer::RegisterCallback(LoopSynced);
-		else
-			Timer::RegisterCallback(i ? Loop2 : Loop1);
-	}
 
+	else
+		Timer::RegisterCallback(i ? Loop2 : Loop1);
+
+	SetSynced(sync);
 	ResetPositionReached(i);
 	encoder->move(position, speed, NULL, PositionReached);
 
 	if (block) {
 		while (!IsPositionReached(i)) {
-			if (sync)
-				LoopSynced();
-			else
-				encoder->loop();
+			syncCurrentSpeed();
+			encoder->loop();
 		}
 
-		if (sync) {
-			encoder1.setMotorPwm(0);
-			encoder2.setMotorPwm(0);
+		if (GetSynced()) {
+			encoder1.runSpeed(0);
+			encoder2.runSpeed(0);
 		} else
-			encoder->setMotorPwm(0);
+			encoder->runSpeed(0);
 	}
 }
 
@@ -206,7 +209,7 @@ void EncoderOnBoardMotor::Forward(float speed)
 	MeEncoderOnBoard *encoder = slot == SLOT1 ? &encoder1 : &encoder2;
 
 	ResetPositionReached(i);
-	Timer::RegisterCallback(i ? Loop2: Loop1);
+	Timer::RegisterCallback(i ? Loop2 : Loop1);
 	encoder->runSpeed(speed);
 }
 
