@@ -31,7 +31,7 @@ void EncoderOnBoardMotor::IsrProcessEncoder2(void)
 		encoder2.pulsePosPlus();
 }
 
-EncoderOnBoardMotor::EncoderOnBoardMotor(int slot) : slot(slot)
+EncoderOnBoardMotor::EncoderOnBoardMotor(int slot, float ratio) : slot(slot)
 {
 	//Set PWM 8KHz
 	TCCR1A = _BV(WGM10);
@@ -45,7 +45,7 @@ EncoderOnBoardMotor::EncoderOnBoardMotor(int slot) : slot(slot)
 	case SLOT1:
 		attachInterrupt(encoder1.getIntNum(), IsrProcessEncoder1, RISING);
 		encoder1.setPulse(9);
-		encoder1.setRatio(39.267);
+		encoder1.setRatio(ratio);
 		encoder1.setPosPid(1.8, 0, 1.2);
 		encoder1.setSpeedPid(0.18, 0, 0);
 		break;
@@ -56,11 +56,16 @@ EncoderOnBoardMotor::EncoderOnBoardMotor(int slot) : slot(slot)
 	default:
 		attachInterrupt(encoder2.getIntNum(), IsrProcessEncoder2, RISING);
 		encoder2.setPulse(9);
-		encoder2.setRatio(39.267);
+		encoder2.setRatio(ratio);
 		encoder2.setPosPid(1.8, 0, 1.2);
 		encoder2.setSpeedPid(0.18, 0, 0);
 		break;
 	}
+}
+
+EncoderOnBoardMotor::EncoderOnBoardMotor(int slot) : slot(slot)
+{
+	EncoderOnBoardMotor(slot, 39.267);
 }
 
 void EncoderOnBoardMotor::PositionReached(int16_t slot, int16_t ext_id)
