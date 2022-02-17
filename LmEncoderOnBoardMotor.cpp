@@ -159,7 +159,7 @@ void EncoderOnBoardMotor::Loop1(void)
 		syncCurrentSpeed();
 		encoder1.loop();
 	} else
-		encoder1.runSpeed(0);
+		encoder1.setMotorPwm(0);
 }
 
 void EncoderOnBoardMotor::Loop2(void)
@@ -168,7 +168,7 @@ void EncoderOnBoardMotor::Loop2(void)
 		syncCurrentSpeed();
 		encoder2.loop();
 	} else
-		encoder2.runSpeed(0);
+		encoder2.setMotorPwm(0);
 }
 
 void EncoderOnBoardMotor::Rotate(long position, float speed)
@@ -205,10 +205,10 @@ void EncoderOnBoardMotor::Rotate(long position, float speed, bool block,
 		}
 
 		if (GetSynced()) {
-			encoder1.runSpeed(0);
-			encoder2.runSpeed(0);
+			encoder1.setMotorPwm(0);
+			encoder2.setMotorPwm(0);
 		} else
-			encoder->runSpeed(0);
+			encoder->setMotorPwm(0);
 	}
 }
 
