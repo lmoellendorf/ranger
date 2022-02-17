@@ -50,6 +50,8 @@ class EncoderOnBoardMotor
 		static void syncCurrentSpeed(void);
 		static void Loop1(void);
 		static void Loop2(void);
+		static int Slot2Index(int slot);
+		static MeEncoderOnBoard *Slot2Encoder(int slot);
 		int slot;
 };
 
