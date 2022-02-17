@@ -21,9 +21,9 @@ class EncoderOnBoardMotor
 	public:
 
 		EncoderOnBoardMotor(int slot);
-		void Rotate(long position, float speed = 100);
-		void Rotate(long position, float speed, bool block);
-		void Rotate(long position, float speed, bool block, bool sync);
+		void Rotate(long angle, float speed = 100);
+		void Rotate(long angle, float speed, bool block);
+		void Rotate(long angle, float speed, bool block, bool sync);
 		void Forward(float speed);
 		void Stop(void);
 

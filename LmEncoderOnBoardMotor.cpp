@@ -171,17 +171,17 @@ void EncoderOnBoardMotor::Loop2(void)
 		encoder2.setMotorPwm(0);
 }
 
-void EncoderOnBoardMotor::Rotate(long position, float speed)
+void EncoderOnBoardMotor::Rotate(long angle, float speed)
 {
-	return Rotate(position, speed, false, false);
+	return Rotate(angle, speed, false, false);
 }
 
-void EncoderOnBoardMotor::Rotate(long position, float speed, bool block)
+void EncoderOnBoardMotor::Rotate(long angle, float speed, bool block)
 {
-	return Rotate(position, speed, block, false);
+	return Rotate(angle, speed, block, false);
 }
 
-void EncoderOnBoardMotor::Rotate(long position, float speed, bool block,
+void EncoderOnBoardMotor::Rotate(long angle, float speed, bool block,
 				 bool sync)
 {
 	int slot = EncoderOnBoardMotor::slot;
@@ -196,7 +196,7 @@ void EncoderOnBoardMotor::Rotate(long position, float speed, bool block,
 
 	SetSynced(sync);
 	ResetPositionReached(i);
-	encoder->move(position, speed, NULL, PositionReached);
+	encoder->move(angle, speed, NULL, PositionReached);
 
 	if (block) {
 		while (!IsPositionReached(i)) {
