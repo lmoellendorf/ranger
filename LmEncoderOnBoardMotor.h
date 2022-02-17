@@ -21,7 +21,6 @@ class EncoderOnBoardMotor
 	public:
 
 		EncoderOnBoardMotor(int slot);
-		EncoderOnBoardMotor(int slot, float ratio);
 		void Rotate(long position, float speed = 100);
 		void Rotate(long position, float speed, bool block);
 		void Rotate(long position, float speed, bool block, bool sync);
@@ -31,6 +30,11 @@ class EncoderOnBoardMotor
 
 	private:
 
+		/**
+		 * This one is private untill I found out what the purpose of
+		 * `ratio` is - if you know, please let me know!
+		 */
+		EncoderOnBoardMotor(int slot, float ratio);
 		static MeEncoderOnBoard encoder1;
 		static MeEncoderOnBoard encoder2;
 		static bool pos_reached[2];
