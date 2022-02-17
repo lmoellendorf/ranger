@@ -27,32 +27,32 @@ void loop()
 
 	LedRing::StopRainbow();
 	//Move forward and block until position is reached
-	motor_l.RotateTo(path1, 200, false, true);
-	motor_r.RotateTo(-path1, 200, true, true);
+	motor_l.Rotate(path1, 200, false, true);
+	motor_r.Rotate(-path1, 200, true, true);
 	//Rotate and block until position is reached
-	motor_l.RotateTo(-turn90, 200, false, true);
-	motor_r.RotateTo(-turn90, 200, true, true);
+	motor_l.Rotate(-turn90, 200, false, true);
+	motor_r.Rotate(-turn90, 200, true, true);
 	//Move forward and block until position is reached
-	motor_l.RotateTo(path2, 200, false, true);
-	motor_r.RotateTo(-path2, 200, true, true);
+	motor_l.Rotate(path2, 200, false, true);
+	motor_r.Rotate(-path2, 200, true, true);
 	//Rotate and block until position is reached
-	motor_l.RotateTo(-turn90, 200, false, true);
-	motor_r.RotateTo(-turn90, 200, true, true);
+	motor_l.Rotate(-turn90, 200, false, true);
+	motor_r.Rotate(-turn90, 200, true, true);
 	//Move forward and block until position is reached
-	motor_l.RotateTo(path3, 200, false, true);
-	motor_r.RotateTo(-path3, 200, true, true);
+	motor_l.Rotate(path3, 200, false, true);
+	motor_r.Rotate(-path3, 200, true, true);
 	//Rotate and block until position is reached
-	motor_l.RotateTo(turn90, 200, false, true);
-	motor_r.RotateTo(turn90, 200, true, true);
+	motor_l.Rotate(turn90, 200, false, true);
+	motor_r.Rotate(turn90, 200, true, true);
 	//Move forward and block until position is reached
-	motor_l.RotateTo(path4, 200, false, true);
-	motor_r.RotateTo(-path4, 200, true, true);
+	motor_l.Rotate(path4, 200, false, true);
+	motor_r.Rotate(-path4, 200, true, true);
 
 	HeartBeat();
 
 	//Do not block
-	motor_l.RotateTo(360, 200);
-	motor_r.RotateTo(-360, 200);
+	motor_l.Rotate(360, 200);
+	motor_r.Rotate(-360, 200);
 	delay(333);
 	motor_l.Stop();
 	motor_r.Stop();

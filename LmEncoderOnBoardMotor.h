@@ -22,9 +22,9 @@ class EncoderOnBoardMotor
 
 		EncoderOnBoardMotor(int slot);
 		EncoderOnBoardMotor(int slot, float ratio);
-		void RotateTo(long position, float speed = 100);
-		void RotateTo(long position, float speed, bool block);
-		void RotateTo(long position, float speed, bool block, bool sync);
+		void Rotate(long position, float speed = 100);
+		void Rotate(long position, float speed, bool block);
+		void Rotate(long position, float speed, bool block, bool sync);
 		void Forward(float speed);
 		void Stop(void);
 

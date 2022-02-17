@@ -161,18 +161,18 @@ void EncoderOnBoardMotor::Loop2(void)
 		encoder2.runSpeed(0);
 }
 
-void EncoderOnBoardMotor::RotateTo(long position, float speed)
+void EncoderOnBoardMotor::Rotate(long position, float speed)
 {
-	return RotateTo(position, speed, false, false);
+	return Rotate(position, speed, false, false);
 }
 
-void EncoderOnBoardMotor::RotateTo(long position, float speed, bool block)
+void EncoderOnBoardMotor::Rotate(long position, float speed, bool block)
 {
-	return RotateTo(position, speed, block, false);
+	return Rotate(position, speed, block, false);
 }
 
-void EncoderOnBoardMotor::RotateTo(long position, float speed, bool block,
-				   bool sync)
+void EncoderOnBoardMotor::Rotate(long position, float speed, bool block,
+				 bool sync)
 {
 	int slot = EncoderOnBoardMotor::slot;
 	int i = (slot == SLOT1 ? 0 : 1);
