@@ -42,9 +42,9 @@ EncoderOnBoardMotor::EncoderOnBoardMotor(int slot, float ratio) : slot(slot)
 	TCCR2A = _BV(WGM21) | _BV(WGM20);
 	TCCR2B = _BV(CS21);
 
-	//Encoder.reset(slot);
 	switch (slot) {
 	case SLOT1:
+		encoder1.reset(slot);
 		attachInterrupt(encoder1.getIntNum(), IsrProcessEncoder1, RISING);
 		encoder1.setPulse(9);
 		encoder1.setRatio(ratio);
@@ -56,6 +56,7 @@ EncoderOnBoardMotor::EncoderOnBoardMotor(int slot, float ratio) : slot(slot)
 
 	/** fall through */
 	default:
+		encoder2.reset(slot);
 		attachInterrupt(encoder2.getIntNum(), IsrProcessEncoder2, RISING);
 		encoder2.setPulse(9);
 		encoder2.setRatio(ratio);
