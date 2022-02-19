@@ -83,9 +83,7 @@ int EncoderOnBoardMotor::Slot2Index(int slot)
 
 void EncoderOnBoardMotor::PositionReached(int16_t slot, int16_t ext_id)
 {
-	int i = Slot2Index(slot);
-
-	pos_reached[i] = true;
+	pos_reached[ext_id] = true;
 }
 
 bool EncoderOnBoardMotor::IsPositionReached(int16_t slot)
@@ -197,7 +195,7 @@ void EncoderOnBoardMotor::Rotate(long angle, float speed, bool block,
 
 	SetSynced(sync);
 	ResetPositionReached(i);
-	encoder->move(angle, speed, NULL, PositionReached);
+	encoder->move(angle, speed, i, PositionReached);
 
 	if (block) {
 		while (!IsPositionReached(i)) {
