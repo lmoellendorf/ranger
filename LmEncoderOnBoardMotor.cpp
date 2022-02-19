@@ -152,17 +152,14 @@ void EncoderOnBoardMotor::syncCurrentSpeed(void)
 	}
 }
 
-void EncoderOnBoardMotor::Loop1(void)
+void EncoderOnBoardMotor::Loop(void)
 {
 	if (!pos_reached[0]) {
 		syncCurrentSpeed();
 		encoder1.loop();
 	} else
 		encoder1.setMotorPwm(0);
-}
 
-void EncoderOnBoardMotor::Loop2(void)
-{
 	if (!pos_reached[1]) {
 		syncCurrentSpeed();
 		encoder2.loop();
@@ -183,31 +180,19 @@ void EncoderOnBoardMotor::Rotate(long angle, float speed, bool block)
 void EncoderOnBoardMotor::Rotate(long angle, float speed, bool block,
 				 bool sync)
 {
-	int slot = EncoderOnBoardMotor::slot;
 	int i = Slot2Index(slot);
 	MeEncoderOnBoard *encoder = Slot2Encoder(slot);
 
-	if (block)
-		Timer::UnregisterCallback(i ? Loop2 : Loop1);
-
-	else
-		Timer::RegisterCallback(i ? Loop2 : Loop1);
-
 	SetSynced(sync);
+	Timer::UnregisterCallback(Loop);
 	ResetPositionReached(i);
 	encoder->move(angle, speed, i, PositionReached);
+	Timer::RegisterCallback(Loop);
 
 	if (block) {
 		while (!IsPositionReached(i)) {
-			syncCurrentSpeed();
-			encoder->loop();
+			;
 		}
-
-		if (GetSynced()) {
-			encoder1.setMotorPwm(0);
-			encoder2.setMotorPwm(0);
-		} else
-			encoder->setMotorPwm(0);
 	}
 }
 
@@ -218,7 +203,7 @@ void EncoderOnBoardMotor::Forward(float speed)
 	MeEncoderOnBoard *encoder = Slot2Encoder(slot);
 
 	ResetPositionReached(i);
-	Timer::RegisterCallback(i ? Loop2 : Loop1);
+	Timer::RegisterCallback(Loop);
 	encoder->runSpeed(speed);
 }
 
