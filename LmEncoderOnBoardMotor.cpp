@@ -190,9 +190,8 @@ void EncoderOnBoardMotor::Rotate(long angle, float speed, bool block,
 	Timer::RegisterCallback(Loop);
 
 	if (block) {
-		while (!IsPositionReached(i)) {
+		while (!IsPositionReached(i))
 			;
-		}
 	}
 }
 
@@ -209,7 +208,22 @@ void EncoderOnBoardMotor::Forward(float speed)
 
 void EncoderOnBoardMotor::Stop(void)
 {
-	MeEncoderOnBoard *encoder = slot == SLOT1 ? &encoder1 : &encoder2;
+	MeEncoderOnBoard *encoder = Slot2Encoder(slot);
 
 	encoder->runSpeed(0);
+}
+
+void EncoderOnBoardMotor::ResetTachoCount(void)
+{
+	MeEncoderOnBoard *encoder = Slot2Encoder(slot);
+
+	encoder->setPulsePos(0);
+	encoder->updateCurPos();
+}
+
+int EncoderOnBoardMotor::GetTachoCount(void)
+{
+	MeEncoderOnBoard *encoder = Slot2Encoder(slot);
+
+	return encoder->getCurPos();
 }
