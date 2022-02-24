@@ -68,6 +68,17 @@ class EncoderOnBoardMotor
 		 */
 		void Stop(void);
 
+		/**
+		 * Reset the tachometer associated with this motor.
+		 */
+		void ResetTachoCount(void);
+
+		/**
+		 * Return the tachometer count.
+		 *
+		 * @return  Current tachometer count in degrees
+		 */
+		int GetTachoCount(void);
 
 	private:
 

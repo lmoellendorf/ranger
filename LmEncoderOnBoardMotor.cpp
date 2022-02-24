@@ -212,3 +212,18 @@ void EncoderOnBoardMotor::Stop(void)
 
 	encoder->runSpeed(0);
 }
+
+void EncoderOnBoardMotor::ResetTachoCount(void)
+{
+	MeEncoderOnBoard *encoder = Slot2Encoder(slot);
+
+	encoder->setPulsePos(0);
+	encoder->updateCurPos();
+}
+
+int EncoderOnBoardMotor::GetTachoCount(void)
+{
+	MeEncoderOnBoard *encoder = Slot2Encoder(slot);
+
+	return encoder->getCurPos();
+}
