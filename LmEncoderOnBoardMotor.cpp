@@ -190,9 +190,8 @@ void EncoderOnBoardMotor::Rotate(long angle, float speed, bool block,
 	Timer::RegisterCallback(Loop);
 
 	if (block) {
-		while (!IsPositionReached(i)) {
+		while (!IsPositionReached(i))
 			;
-		}
 	}
 }
 
