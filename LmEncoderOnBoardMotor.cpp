@@ -208,7 +208,7 @@ void EncoderOnBoardMotor::Forward(float speed)
 
 void EncoderOnBoardMotor::Stop(void)
 {
-	MeEncoderOnBoard *encoder = slot == SLOT1 ? &encoder1 : &encoder2;
+	MeEncoderOnBoard *encoder = Slot2Encoder(slot);
 
 	encoder->runSpeed(0);
 }
