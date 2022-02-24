@@ -20,11 +20,52 @@ class EncoderOnBoardMotor
 
 	public:
 
+		/**
+		 * Constructor to assign one of the two onboard slots to a
+		 *
+		 * @param slot  On board encoder slot to use
+		 * 		(SLOT1 is right, SLOT_2 is left)
+		 */
 		EncoderOnBoardMotor(int slot);
+
+		/**
+		 * Rotate by the requested number of degrees.
+		 *
+		 * @param angle  Angle in degrees to rotate the motor by
+		 * @param speed  Speed in degrees/second
+		 */
 		void Rotate(long angle, float speed = 100);
+
+		/**
+		 * Rotate by the requested number of degrees.
+		 *
+		 * @param angle  Angle in degrees to rotate the motor by
+		 * @param speed  Speed in degrees/second
+		 * @param block  Waits for the move to complete if true
+		 */
 		void Rotate(long angle, float speed, bool block);
+
+		/**
+		 * Rotate by the requested number of degrees.
+		 *
+		 * @param angle  Angle in degrees to rotate the motor by
+		 * @param speed  Speed in degrees/second
+		 * @param block  Waits for the move to complete if true
+		 * @param sync   Tries to keep two motors in sync if true
+		 *               This feature is experimental
+		 */
 		void Rotate(long angle, float speed, bool block, bool sync);
+
+		/**
+		 * Causes motor to rotate forward until Stop() is called.
+		 *
+		 * @param speed  Speed in degrees/second
+		 */
 		void Forward(float speed);
+
+		/**
+		 * Causes motor to stop, pretty much instantaneously.
+		 */
 		void Stop(void);
 
 
