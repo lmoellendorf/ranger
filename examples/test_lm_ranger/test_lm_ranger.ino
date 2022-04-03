@@ -6,10 +6,10 @@ Ranger ranger(SLOT_L, SLOT_R);
 
 void setup()
 {
-	LedRing::StartRainbow();
+	LedRing::startRainbow();
 }
 
 void loop()
 {
-	ranger.MoveTo(6000, 200);
+	ranger.moveTo(6000, 200);
 }

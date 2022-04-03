@@ -13,8 +13,8 @@
 Ranger::Ranger(int slot_l = SLOT_L, int slot_r = SLOT_R) :
 	motor_l(slot_l), motor_r(slot_r) {}
 
-void Ranger::MoveTo(long position, float speed)
+void Ranger::moveTo(long position, float speed)
 {
-	Ranger::motor_l.Rotate(position, speed, false);
-	Ranger::motor_r.Rotate(-position, speed, false);
+	Ranger::motor_l.rotate(position, speed, false);
+	Ranger::motor_r.rotate(-position, speed, false);
 }

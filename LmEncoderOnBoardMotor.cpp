@@ -17,7 +17,7 @@ MeEncoderOnBoard EncoderOnBoardMotor::encoder2(SLOT2);
 bool EncoderOnBoardMotor::pos_reached[] = { false, false };
 bool EncoderOnBoardMotor::synced = false;
 
-void EncoderOnBoardMotor::IsrProcessEncoder1(void)
+void EncoderOnBoardMotor::isrProcessEncoder1(void)
 {
 	if (digitalRead(encoder1.getPortB()) == 0)
 		encoder1.pulsePosMinus();
@@ -25,7 +25,7 @@ void EncoderOnBoardMotor::IsrProcessEncoder1(void)
 		encoder1.pulsePosPlus();
 }
 
-void EncoderOnBoardMotor::IsrProcessEncoder2(void)
+void EncoderOnBoardMotor::isrProcessEncoder2(void)
 {
 	if (digitalRead(encoder2.getPortB()) == 0)
 		encoder2.pulsePosMinus();
@@ -45,7 +45,7 @@ EncoderOnBoardMotor::EncoderOnBoardMotor(int slot, float ratio) : slot(slot)
 	switch (slot) {
 	case SLOT1:
 		encoder1.reset(slot);
-		attachInterrupt(encoder1.getIntNum(), IsrProcessEncoder1, RISING);
+		attachInterrupt(encoder1.getIntNum(), isrProcessEncoder1, RISING);
 		encoder1.setPulse(9);
 		encoder1.setRatio(ratio);
 		encoder1.setPosPid(1.8, 0, 1.2);
@@ -57,7 +57,7 @@ EncoderOnBoardMotor::EncoderOnBoardMotor(int slot, float ratio) : slot(slot)
 	/** fall through */
 	default:
 		encoder2.reset(slot);
-		attachInterrupt(encoder2.getIntNum(), IsrProcessEncoder2, RISING);
+		attachInterrupt(encoder2.getIntNum(), isrProcessEncoder2, RISING);
 		encoder2.setPulse(9);
 		encoder2.setRatio(ratio);
 		encoder2.setPosPid(1.8, 0, 1.2);
@@ -71,24 +71,24 @@ EncoderOnBoardMotor::EncoderOnBoardMotor(int slot) : slot(slot)
 	EncoderOnBoardMotor(slot, 39.267);
 }
 
-MeEncoderOnBoard *EncoderOnBoardMotor::Slot2Encoder(int slot)
+MeEncoderOnBoard *EncoderOnBoardMotor::slot2Encoder(int slot)
 {
 	return slot == SLOT1 ? &encoder1 : &encoder2;
 }
 
-int EncoderOnBoardMotor::Slot2Index(int slot)
+int EncoderOnBoardMotor::slot2Index(int slot)
 {
 	return (slot == SLOT1 ? 0 : 1);
 }
 
-void EncoderOnBoardMotor::PositionReached(int16_t slot, int16_t ext_id)
+void EncoderOnBoardMotor::positionReached(int16_t slot, int16_t ext_id)
 {
 	pos_reached[ext_id] = true;
 }
 
-bool EncoderOnBoardMotor::IsPositionReached(int16_t slot)
+bool EncoderOnBoardMotor::isPositionReached(int16_t slot)
 {
-	int i = Slot2Index(slot);
+	int i = slot2Index(slot);
 	bool ret;
 
 	noInterrupts();
@@ -97,16 +97,16 @@ bool EncoderOnBoardMotor::IsPositionReached(int16_t slot)
 	return ret;
 }
 
-void EncoderOnBoardMotor::ResetPositionReached(int16_t slot)
+void EncoderOnBoardMotor::resetPositionReached(int16_t slot)
 {
-	int i = Slot2Index(slot);
+	int i = slot2Index(slot);
 
 	noInterrupts();
 	pos_reached[i] = false;
 	interrupts();
 }
 
-bool EncoderOnBoardMotor::ArePositionsReached(void)
+bool EncoderOnBoardMotor::arePositionsReached(void)
 {
 	bool ret;
 
@@ -116,14 +116,14 @@ bool EncoderOnBoardMotor::ArePositionsReached(void)
 	return ret;
 }
 
-void EncoderOnBoardMotor::SetSynced(bool on)
+void EncoderOnBoardMotor::setSynced(bool on)
 {
 	noInterrupts();
 	synced = on;
 	interrupts();
 }
 
-bool EncoderOnBoardMotor::GetSynced(void)
+bool EncoderOnBoardMotor::getSynced(void)
 {
 	bool ret;
 
@@ -137,7 +137,7 @@ void EncoderOnBoardMotor::syncCurrentSpeed(void)
 {
 	float speed;
 
-	if (GetSynced()) {
+	if (getSynced()) {
 		speed = encoder1.getCurrentSpeed();
 
 		if (encoder1.distanceToGo() > encoder2.distanceToGo()) {
@@ -152,7 +152,7 @@ void EncoderOnBoardMotor::syncCurrentSpeed(void)
 	}
 }
 
-void EncoderOnBoardMotor::Loop(void)
+void EncoderOnBoardMotor::loop(void)
 {
 	if (!pos_reached[0]) {
 		syncCurrentSpeed();
@@ -167,63 +167,63 @@ void EncoderOnBoardMotor::Loop(void)
 		encoder2.setMotorPwm(0);
 }
 
-void EncoderOnBoardMotor::Rotate(long angle, float speed)
+void EncoderOnBoardMotor::rotate(long angle, float speed)
 {
-	return Rotate(angle, speed, false, false);
+	return rotate(angle, speed, false, false);
 }
 
-void EncoderOnBoardMotor::Rotate(long angle, float speed, bool block)
+void EncoderOnBoardMotor::rotate(long angle, float speed, bool block)
 {
-	return Rotate(angle, speed, block, false);
+	return rotate(angle, speed, block, false);
 }
 
-void EncoderOnBoardMotor::Rotate(long angle, float speed, bool block,
+void EncoderOnBoardMotor::rotate(long angle, float speed, bool block,
 				 bool sync)
 {
-	int i = Slot2Index(slot);
-	MeEncoderOnBoard *encoder = Slot2Encoder(slot);
+	int i = slot2Index(slot);
+	MeEncoderOnBoard *encoder = slot2Encoder(slot);
 
-	SetSynced(sync);
-	Timer::UnregisterCallback(Loop);
-	ResetPositionReached(i);
-	encoder->move(angle, speed, i, PositionReached);
-	Timer::RegisterCallback(Loop);
+	setSynced(sync);
+	Timer::unregisterCallback(loop);
+	resetPositionReached(i);
+	encoder->move(angle, speed, i, positionReached);
+	Timer::registerCallback(loop);
 
 	if (block) {
-		while (!IsPositionReached(i))
+		while (!isPositionReached(i))
 			;
 	}
 }
 
-void EncoderOnBoardMotor::Forward(float speed)
+void EncoderOnBoardMotor::forward(float speed)
 {
 	int slot = EncoderOnBoardMotor::slot;
-	int i = Slot2Index(slot);
-	MeEncoderOnBoard *encoder = Slot2Encoder(slot);
+	int i = slot2Index(slot);
+	MeEncoderOnBoard *encoder = slot2Encoder(slot);
 
-	ResetPositionReached(i);
-	Timer::RegisterCallback(Loop);
+	resetPositionReached(i);
+	Timer::registerCallback(loop);
 	encoder->runSpeed(speed);
 }
 
-void EncoderOnBoardMotor::Stop(void)
+void EncoderOnBoardMotor::stop(void)
 {
-	MeEncoderOnBoard *encoder = Slot2Encoder(slot);
+	MeEncoderOnBoard *encoder = slot2Encoder(slot);
 
 	encoder->runSpeed(0);
 }
 
-void EncoderOnBoardMotor::ResetTachoCount(void)
+void EncoderOnBoardMotor::resetTachoCount(void)
 {
-	MeEncoderOnBoard *encoder = Slot2Encoder(slot);
+	MeEncoderOnBoard *encoder = slot2Encoder(slot);
 
 	encoder->setPulsePos(0);
 	encoder->updateCurPos();
 }
 
-int EncoderOnBoardMotor::GetTachoCount(void)
+int EncoderOnBoardMotor::getTachoCount(void)
 {
-	MeEncoderOnBoard *encoder = Slot2Encoder(slot);
+	MeEncoderOnBoard *encoder = slot2Encoder(slot);
 
 	return encoder->getCurPos();
 }

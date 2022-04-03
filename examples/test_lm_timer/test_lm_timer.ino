@@ -7,8 +7,8 @@ void setup()
 
 void loop()
 {
-	LedRing::StartRainbow();
+	LedRing::startRainbow();
 	delay(2000);
-	LedRing::StopRainbow();
+	LedRing::stopRainbow();
 	delay(1000);
 }
