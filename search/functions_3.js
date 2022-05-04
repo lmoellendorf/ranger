@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['resettachocount_33',['ResetTachoCount',['../classEncoderOnBoardMotor.html#a5f26b99e69e705160c8e01354b94de95',1,'EncoderOnBoardMotor']]],
-  ['rotate_34',['Rotate',['../classEncoderOnBoardMotor.html#adda7948ffa466c52596dda2ed209407c',1,'EncoderOnBoardMotor::Rotate(long angle, float speed=100)'],['../classEncoderOnBoardMotor.html#a05dd7a493bcd402c7a448fe8d59fcfb4',1,'EncoderOnBoardMotor::Rotate(long angle, float speed, bool block)'],['../classEncoderOnBoardMotor.html#a3224d91836a9a06feef66d415b66e7ba',1,'EncoderOnBoardMotor::Rotate(long angle, float speed, bool block, bool sync)']]]
+  ['resettachocount_39',['resetTachoCount',['../classEncoderOnBoardMotor.html#aa33f9f6d49031ba5538f85dd953beaec',1,'EncoderOnBoardMotor']]],
+  ['rotate_40',['rotate',['../classEncoderOnBoardMotor.html#a7892fbaa4ef0dbf485ad6c5e6e50fd10',1,'EncoderOnBoardMotor::rotate(long angle, float speed=100)'],['../classEncoderOnBoardMotor.html#a43d6f8dcd181004c2048fc1095dc6b3a',1,'EncoderOnBoardMotor::rotate(long angle, float speed, bool block)'],['../classEncoderOnBoardMotor.html#a55a595836335e72298d869fc719b50af',1,'EncoderOnBoardMotor::rotate(long angle, float speed, bool block, bool sync)']]]
 ];

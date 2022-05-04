@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['gettachocount_32',['GetTachoCount',['../classEncoderOnBoardMotor.html#a76c3acd798d3c769210a5f55e4544da9',1,'EncoderOnBoardMotor']]]
+  ['gettachocount_38',['getTachoCount',['../classEncoderOnBoardMotor.html#a1c348231cc5e4acbb1ee350b54210165',1,'EncoderOnBoardMotor']]]
 ];

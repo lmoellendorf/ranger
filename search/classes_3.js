@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['timer_21',['Timer',['../classTimer.html',1,'']]]
+  ['ranger_24',['Ranger',['../classRanger.html',1,'']]]
 ];
