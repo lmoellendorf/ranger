@@ -17,10 +17,10 @@ void loop()
 	Serial.println(strength);
 
 	if (strength > 200)
-		LedRing::StartRainbow();
+		LedRing::startRainbow();
 
 	else
-		LedRing::StopRainbow();
+		LedRing::stopRainbow();
 
 	delay(100);
 }

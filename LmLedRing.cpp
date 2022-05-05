@@ -17,7 +17,7 @@ MeRGBLed LedRing::led(0, LEDNUM);
 volatile float LedRing::j(0), LedRing::f(0), LedRing::k(0);
 volatile int t = 0;
 
-void LedRing::ColorLoop()
+void LedRing::colorLoop()
 {
 	uint8_t red = 64 * (1 + sin(t / 2.0 + j / 4.0));
 	uint8_t green = 64 * (1 + sin(t / 1.0 + f / 9.0 + 2.1));
@@ -32,16 +32,16 @@ void LedRing::ColorLoop()
 	t %= LEDNUM;
 }
 
-void LedRing::StartRainbow()
+void LedRing::startRainbow()
 {
 	// on-board LED ring, at PORT0 (onboard)
 	led.setpin(44);
-	Timer::RegisterCallback(ColorLoop);
+	Timer::registerCallback(colorLoop);
 }
 
-void LedRing::StopRainbow()
+void LedRing::stopRainbow()
 {
-	Timer::UnregisterCallback(ColorLoop);
+	Timer::unregisterCallback(colorLoop);
 
 	for (int n = 0; n < LEDNUM; n++) {
 		led.setColorAt(n, 0, 0, 0);

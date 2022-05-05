@@ -19,14 +19,14 @@ class LedRing
 
 	public:
 
-		static void StartRainbow(void);
-		static void StopRainbow(void);
+		static void startRainbow(void);
+		static void stopRainbow(void);
 
 	private:
 
 		static MeRGBLed led;
 		static volatile float j, f, k;
-		static void ColorLoop();
+		static void colorLoop();
 };
 
 //! @cond SuppressGuard

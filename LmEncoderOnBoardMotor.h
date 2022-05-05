@@ -34,7 +34,7 @@ class EncoderOnBoardMotor
 		 * @param angle  Angle in degrees to rotate the motor by
 		 * @param speed  Speed in degrees/second
 		 */
-		void Rotate(long angle, float speed = 100);
+		void rotate(long angle, float speed = 100);
 
 		/**
 		 * Rotate by the requested number of degrees.
@@ -43,7 +43,7 @@ class EncoderOnBoardMotor
 		 * @param speed  Speed in degrees/second
 		 * @param block  Waits for the move to complete if true
 		 */
-		void Rotate(long angle, float speed, bool block);
+		void rotate(long angle, float speed, bool block);
 
 		/**
 		 * Rotate by the requested number of degrees.
@@ -54,31 +54,31 @@ class EncoderOnBoardMotor
 		 * @param sync   Tries to keep two motors in sync if true
 		 *               This feature is experimental
 		 */
-		void Rotate(long angle, float speed, bool block, bool sync);
+		void rotate(long angle, float speed, bool block, bool sync);
 
 		/**
 		 * Causes motor to rotate forward until Stop() is called.
 		 *
 		 * @param speed  Speed in degrees/second
 		 */
-		void Forward(float speed);
+		void forward(float speed);
 
 		/**
 		 * Causes motor to stop, pretty much instantaneously.
 		 */
-		void Stop(void);
+		void stop(void);
 
 		/**
 		 * Reset the tachometer associated with this motor.
 		 */
-		void ResetTachoCount(void);
+		void resetTachoCount(void);
 
 		/**
 		 * Return the tachometer count.
 		 *
 		 * @return  Current tachometer count in degrees
 		 */
-		int GetTachoCount(void);
+		int getTachoCount(void);
 
 	private:
 
@@ -91,18 +91,18 @@ class EncoderOnBoardMotor
 		static MeEncoderOnBoard encoder2;
 		static bool pos_reached[2];
 		static bool synced;
-		static void IsrProcessEncoder1(void);
-		static void IsrProcessEncoder2(void);
-		static void PositionReached(int16_t slot, int16_t ext_id);
-		static bool IsPositionReached(int16_t slot);
-		static bool ArePositionsReached(void);
-		static void ResetPositionReached(int16_t slot);
-		static void SetSynced(bool on);
-		static bool GetSynced(void);
+		static void isrProcessEncoder1(void);
+		static void isrProcessEncoder2(void);
+		static void positionReached(int16_t slot, int16_t ext_id);
+		static bool isPositionReached(int16_t slot);
+		static bool arePositionsReached(void);
+		static void resetPositionReached(int16_t slot);
+		static void setSynced(bool on);
+		static bool getSynced(void);
 		static void syncCurrentSpeed(void);
-		static void Loop(void);
-		static int Slot2Index(int slot);
-		static MeEncoderOnBoard *Slot2Encoder(int slot);
+		static void loop(void);
+		static int slot2Index(int slot);
+		static MeEncoderOnBoard *slot2Encoder(int slot);
 		int slot;
 };
 

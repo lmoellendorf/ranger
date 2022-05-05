@@ -23,7 +23,7 @@ class Ranger
 	public:
 
 		Ranger(int slot_l, int slot_r);
-		void MoveTo(long position, float speed = 100);
+		void moveTo(long position, float speed = 100);
 
 	private:
 
