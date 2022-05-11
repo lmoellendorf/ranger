@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - develop
+  workflow_dispatch:
+    branches:
+      - develop
 
 jobs:
   deploy:
