@@ -185,12 +185,12 @@ void EncoderOnBoardMotor::rotate(long angle, float speed, bool block,
 
 	setSynced(sync);
 	Timer::unregisterCallback(loop);
-	resetPositionReached(i);
+	resetPositionReached(slot);
 	encoder->move(angle, speed, i, positionReached);
 	Timer::registerCallback(loop);
 
 	if (block) {
-		while (!isPositionReached(i))
+		while (!isPositionReached(slot))
 			;
 	}
 }
@@ -201,7 +201,7 @@ void EncoderOnBoardMotor::forward(float speed)
 	int i = slot2Index(slot);
 	MeEncoderOnBoard *encoder = slot2Encoder(slot);
 
-	resetPositionReached(i);
+	resetPositionReached(slot);
 	Timer::registerCallback(loop);
 	encoder->runSpeed(speed);
 }
