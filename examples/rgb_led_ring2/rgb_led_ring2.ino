@@ -1,7 +1,6 @@
 #include "MeAuriga.h"
 
 MeRGBLed led_ring = MeRGBLed(0, 12);
-int i = 0;
 
 void setup()
 {
@@ -10,21 +9,13 @@ void setup()
 
 void loop()
 {
-	int led;
+	for (int i = 0; i < 12; i++) {
+		led_ring.setColor(0, 0, 0, 0);
 
-	/* 0 <= led <= 11 */
-	led = (i % 12);
-	/* 1 <= led <= 12 */
-	led++;
-	led_ring.setColor(0, 0, 0, 0);
-	led_ring.setColor(led, 0, 0, 25);
-	led = (led % 12);
-	led++;
-	led_ring.setColor(led, 0, 0, 255);
-	led = (led % 12);
-	led++;
-	led_ring.setColor(led, 0, 0, 25);
-	led_ring.show();
-	delay(100);
-	i++;
+		for (int j = 0; j < 5; j++)
+			led_ring.setColor(((i + j) % 12) + 1, 255, 0, 0) ;
+
+		led_ring.show();
+		delay(100);
+	}
 }
