@@ -21,7 +21,8 @@ void loop()
 		led_ring.setColor(0, 0, 0, 0) ;
 
 		for (int j = 0; j < n_led; j++)
-			led_ring.setColor(((i + j) % 12) + 1, dim(n_led, j), 0, 0) ;
+			led_ring.setColor(((i + j) % 12) + 1, dim(n_led, j), dim(n_led,
+					  (j + n_led / 2) % n_led), dim(n_led, (j + n_led / 4) % n_led)) ;
 
 		led_ring.show();
 		delay(100);
