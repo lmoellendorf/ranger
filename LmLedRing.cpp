@@ -15,7 +15,7 @@
 
 MeRGBLed LedRing::led(0, LEDNUM);
 volatile float LedRing::j(0), LedRing::f(0), LedRing::k(0);
-volatile int t = 0;
+volatile int LedRing::t = 0;
 
 void LedRing::colorLoop()
 {
