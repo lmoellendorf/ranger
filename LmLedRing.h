@@ -26,6 +26,7 @@ class LedRing
 
 		static MeRGBLed led;
 		static volatile float j, f, k;
+		static volatile int t;
 		static void colorLoop();
 };
 
