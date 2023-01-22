@@ -1,0 +1,12 @@
+image: debian:stable-backports
+
+pages:
+  script:
+    - apt-get update
+    - apt-get install -y doxygen rsync
+    - doxygen
+    - mkdir public/
+    - rsync --archive docs/html/ public/
+  artifacts:
+      paths:
+        - public
