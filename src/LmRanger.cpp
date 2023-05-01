@@ -2,7 +2,7 @@
  * @copyright Lars Möllendorf
  * @file
  * @author Lars Möllendorf <lars@moellendorf.eu>
- * @brief Simplified Ranger Movements
+ * @brief Simplified Makeblock mBot Ranger Movements
  *
  * @details
  */
