@@ -67,8 +67,27 @@ $(function() {
 <div class="title">README </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>See <a href="https://lmoellendorf.github.io/ranger/">https://lmoellendorf.github.io/ranger/</a></p>
-<p>or <a href="https://lmoellendorf.gitlab.io/ranger">https://lmoellendorf.gitlab.io/ranger</a> </p>
+<div class="textblock"><p>h1. API</p>
+<p>See <a href="https://lmoellendorf.gitlab.io/ranger">https://lmoellendorf.gitlab.io/ranger</a> or <a href="https://lmoellendorf.github.io/ranger/">https://lmoellendorf.github.io/ranger/</a> for a description of the Application Programming Interface, i.e. how to code with this library.</p>
+<p>h1. Hardware</p>
+<p>h2. RJ25 Cables</p>
+<p>Makeblock mBot uses standard RJ25 cables to attach sensors and motors to the controller.</p>
+<p>Since LEGO Mindstorms NXT, LEGO also uses customized RJ25 cables to attach sensors and motors to the controller "brick". Those cables are similiar to those used by Makeblock with 2 crucial differences.</p>
+<p>1) Both the standard RJ25 cables and the customized LEGO cables have a plastic tab to provide a latching mechanism that secures the physical connection. On standard RJ25 cable plugs this tab is centered, where on LEGO cables this tab is on the left side of the plug.</p>
+<p>2) The pins of the plugs are used differently.</p>
+<p>h2. Sensor Cables</p>
+<p>The sensors cables of both vendors provide wires for</p>
+<ul>
+<li>analog input</li>
+<li>ground (GND)</li>
+<li>power supply, aka Voltage common collector (VCC)</li>
+<li>I2C serial communication bus (SCL/SDA)</li>
+</ul>
+<p>The table below maps the pinout of LEGO Mindstorms cables to the pinout ouf Makeblock mBot cables.</p>
+<p>|_. Pin |_. Color |_. LEGO |_. Makeblock | | 1 | white | analog input | analog input 1 | | 2 | black | GND | analog input 2 | | 3 | red | GND | VCC | | 4 | green | VCC | GND | | 5 | yellow | SCL | SDA | | 6 | blue | SDA | SCL |</p>
+<p>Therefore to use LEGO Mindstorms sensors and motors on Makeblock mBot we have to produce adapter cables.</p>
+<p>We do this by replacing one plug of a LEGO Mindstorms cable by a standard RJ25 plug, using a standard RJ25 crimp tool. To match the different pinouts we twist each color pair once so the order of the colors in our standard plug becomes:</p>
+<p>|_. Pin |_. Color | | 1 | black | | 2 | white | | 3 | green | | 4 | red | | 5 | blue | | 6 | yellow | </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->
