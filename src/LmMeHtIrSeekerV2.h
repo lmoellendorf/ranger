@@ -2,14 +2,14 @@
  * @copyright Lars Möllendorf
  * @file
  * @author Lars Möllendorf <lars@moellendorf.eu>
- * @brief HiTechnick Infrared Seeker for Arduino
+ * @brief HiTechnic Infrared Seeker for Arduino
  *
  * @details
  */
 
 //! @cond SuppressGuard
-#ifndef LM_EM_HT_IR_SEEKER_V2_
-#define LM_EM_HT_IR_SEEKER_V2_
+#ifndef LM_ME_HT_IR_SEEKER_V2_
+#define LM_ME_HT_IR_SEEKER_V2_
 //! @endcond
 
 #include <LmHtIrSeekerV2.h>

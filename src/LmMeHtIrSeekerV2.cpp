@@ -2,7 +2,7 @@
  * @copyright Lars Möllendorf
  * @file
  * @author Lars Möllendorf <lars@moellendorf.eu>
- * @brief Mindsensors LineLeader V2 for Arduino
+ * @brief HiTechnic Infrared Seeker for Arduino
  *
  * @details
  */
