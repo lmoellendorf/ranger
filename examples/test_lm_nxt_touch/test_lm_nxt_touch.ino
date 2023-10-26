@@ -4,16 +4,14 @@
 
 NxtTouch touch = NxtTouch(PORT6);
 
-void setup()
-{
+void setup() {
 }
 
-void loop()
-{
-	bool down = touch.isDown();
+void loop() {
+  bool down = touch.isDown();
 
-	if (down)
-		LedRing::startRainbow();
-	else
-		LedRing::stopRainbow();
+  if (down)
+    LedRing::startRainbow();
+  else
+    LedRing::stopRainbow();
 }
