@@ -1,7 +1,7 @@
 #include <MeAuriga.h>
 #include <LmMeHtIrSeekerV2.h>
 
-MeHtIrSeekerV2 seeker;
+MeHtIrSeekerV2 seeker = MeHtIrSeekerV2(PORT_6, MeHtIrSeekerV2::AC);
 
 void getDeviceInfo(void) {
   char fw_str[9] = { 0 };
@@ -31,7 +31,6 @@ void getDeviceInfo(void) {
 }
 
 void setup() {
-  seeker = MeHtIrSeekerV2(PORT_7, MeHtIrSeekerV2::AC);
   Serial.begin(9600);
   /* wait untill the sensor is fully powered */
   delay(1);

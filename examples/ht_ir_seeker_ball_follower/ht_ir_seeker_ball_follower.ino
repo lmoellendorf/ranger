@@ -6,12 +6,11 @@
 #include <LmMeHtIrSeekerV2.h>
 #include <LmEncoderOnBoardMotor.h>
 
-MeHtIrSeekerV2 seeker;
+MeHtIrSeekerV2 seeker = MeHtIrSeekerV2(PORT_6, MeHtIrSeekerV2::AC);
 EncoderOnBoardMotor motor_l = EncoderOnBoardMotor(SLOT2);
 EncoderOnBoardMotor motor_r = EncoderOnBoardMotor(SLOT1);
 
 void setup() {
-  seeker = MeHtIrSeekerV2(PORT_6, MeHtIrSeekerV2::AC);
 }
 
 void loop() {
