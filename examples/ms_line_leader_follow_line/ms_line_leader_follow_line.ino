@@ -49,7 +49,6 @@ int last = 45;
 float normspeed = 50;
 
 void setup() {
-  Serial.begin(9600);
 }
 
 void loop() {
@@ -68,12 +67,8 @@ void loop() {
     avg = last;
   }
 
-  Serial.print("avg: ");
-  Serial.println(avg);
   /* See top comment for details */
   deviation = 45 - avg;
-  Serial.print("dev: ");
-  Serial.println(deviation);
   /**
    * scale deviaton according to normal speed so it will at most
    *
@@ -81,9 +76,6 @@ void loop() {
    * - increase to double normspeed
    */
   deviation = (deviation / 35.) * normspeed;
-  Serial.print("dev: ");
-  Serial.println(deviation);
-  Serial.println();
   /**
    * This works only if the line leader is built in in forward direction.
    * In forward direction the socket points to the rear of the robot.
