@@ -46,13 +46,7 @@ int avg;
 /* last valid "average" value */
 int last = 45;
 /* normal forward speed */
-int normspeed = 100;
-/**
- * factor aplied to deviation value to make motor speed at most
- * - decrease to 0
- * - increase to 200
- */
-int fact = normspeed / 35;
+float normspeed = 50;
 
 void setup() {
 }
@@ -76,10 +70,19 @@ void loop() {
   /* See top comment for details */
   deviation = 45 - avg;
   /**
-	 * In case the curves of the line are too steep, multiply the deviation
-	 * by a constant factor
-	 */
-  deviation *= fact;
+   * scale deviaton according to normal speed so it will at most
+   *
+   * - decrease to 0
+   * - increase to double normspeed
+   */
+  deviation = (deviation / 35.) * normspeed;
+  /**
+   * This works only if the line leader is built in in forward direction.
+   * In forward direction the socket points to the rear of the robot.
+   *
+   * If the sensor is built in reverse direction, substract deviation from the
+   * speed of the right motor and add it to the speed of the left instead.
+   */
   motor_r.forward(-(normspeed + deviation));
   motor_l.forward(normspeed - deviation);
 }
