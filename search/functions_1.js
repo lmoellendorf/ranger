@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['forward_42',['forward',['../classEncoderOnBoardMotor.html#ac1940aba1dd3fd836b1c4816271c7779',1,'EncoderOnBoardMotor']]]
+  ['encoderonboardmotor_70',['EncoderOnBoardMotor',['../classEncoderOnBoardMotor.html#a4ed70f65aeb136cd70b90b9fbacefd9b',1,'EncoderOnBoardMotor']]]
 ];

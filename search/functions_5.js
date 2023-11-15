@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['stop_47',['stop',['../classEncoderOnBoardMotor.html#a29c0a6766660d2ff011543c87df9706b',1,'EncoderOnBoardMotor']]]
+  ['mergblinefollower_86',['MeRGBLineFollower',['../classMeRGBLineFollower.html#a8a26ec6f732c2fd2e5f5e0edfbe00d96',1,'MeRGBLineFollower']]]
 ];
