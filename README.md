@@ -1,13 +1,14 @@
-h1. API
+# API
 
-See https://lmoellendorf.gitlab.io/ranger
-or https://lmoellendorf.github.io/ranger/
-for a description of the Application Programming Interface, i.e. how to code
-with this library.
+For a description of the Application Programming Interface, i.e. how to code
+with this library, see:
 
-h1. Hardware
+- [Documentation on Gitlab](https://lmoellendorf.gitlab.io/ranger) or
+- [Documentation on Github](https://lmoellendorf.github.io/ranger)
 
-h2. RJ25 Cables
+# Hardware
+
+## RJ25 Cables
 
 Makeblock mBot uses standard RJ25 cables to attach sensors and motors to the
 controller.
@@ -24,7 +25,7 @@ is on the left side of the plug.
 
 2) The pins of the plugs are used differently.
 
-h2. Sensor Cables
+## Sensor Cables
 
 The sensors cables of both vendors provide wires for
 
@@ -37,7 +38,8 @@ The table below maps the pinout of LEGO Mindstorms cables to the pinout ouf
 Makeblock mBot cables.
 
 
-|_. Pin |_. Color |_. LEGO       |_. Makeblock    |
+| Pin   | Color   | LEGO         | Makeblock      |
+|-------|---------|--------------|----------------|
 | 1     | white   | analog input | analog input 1 |
 | 2     | black   | GND          | analog input 2 |
 | 3     | red     | GND          | VCC            |
@@ -53,7 +55,8 @@ plug, using a standard RJ25 crimp tool.
 To match the different pinouts we twist each color pair once so the order of
 the colors in our standard plug becomes:
 
-|_. Pin |_. Color |
+| Pin   | Color   |
+|-------|---------|
 | 1     | black   |
 | 2     | white   |
 | 3     | green   |
