@@ -7,11 +7,12 @@ EncoderOnBoardMotor motor_r = EncoderOnBoardMotor(SLOT1);
 MeRGBLineFollower linefollower = MeRGBLineFollower(PORT_6, ADDRESS2);
 
 int16_t turnoffset = 0;
-int16_t set_speed = 50;
+int16_t set_speed = 80;
+float kp = 2. * (float)set_speed / 512.;
 
 void setup() {
   linefollower.begin();
-  linefollower.setKp(0.3);
+  linefollower.setKp(kp);
 }
 
 void loop() {
