@@ -27,7 +27,7 @@
  * \par Method List:
  *
  *    1.void MeRGBLineFollower::setpin(uint8_t AD0, uint8_t INT)
- *	 	2.void MeRGBLineFollower::begin(void)
+ *    2.void MeRGBLineFollower::begin(void)
  *    3.uint8_t MeRGBLineFollower::getDevAddr(void)
  *    4.uint8_t MeRGBLineFollower::getADCValueRGB1(void)
  *    5.uint8_t MeRGBLineFollower::getADCValueRGB2(void)
@@ -116,7 +116,7 @@ MeRGBLineFollower::MeRGBLineFollower(uint8_t port, uint8_t address) : MePort(por
     digitalWrite(s2,LOW);
   }
   else
-  { 
+  {
     digitalWrite(s1,HIGH);
     digitalWrite(s2,HIGH);
     address = ADDRESS1;
@@ -162,7 +162,7 @@ MeRGBLineFollower::MeRGBLineFollower(uint8_t AD0, uint8_t INT, uint8_t address)
     digitalWrite(INT,LOW);
   }
   else
-  { 
+  {
     digitalWrite(AD0,HIGH);
     digitalWrite(INT,HIGH);
     address = ADDRESS1;
@@ -212,16 +212,16 @@ void MeRGBLineFollower::setpin(uint8_t AD0, uint8_t INT)
  * \return
  *   None
  * \par Others
- *   
+ *
  */
 void MeRGBLineFollower::begin(void)
 {
   uint8_t i;
-  
+
   Kp = 0.3;
   study_types = STUDY_IDLE;
   iic_error_count = 0;
-  
+
   Wire.begin();
   delay(10);
 }
@@ -257,7 +257,7 @@ uint8_t MeRGBLineFollower::getDevAddr(void)
  * \return
  *   The ADC value of RGB1
  * \par Others
- *   
+ *
  */
 uint8_t MeRGBLineFollower::getADCValueRGB1(void)
 {
@@ -276,7 +276,7 @@ uint8_t MeRGBLineFollower::getADCValueRGB1(void)
  * \return
  *   The ADC value of RGB2
  * \par Others
- *   
+ *
  */
 uint8_t MeRGBLineFollower::getADCValueRGB2(void)
 {
@@ -295,7 +295,7 @@ uint8_t MeRGBLineFollower::getADCValueRGB2(void)
  * \return
  *   The ADC value of RGB3
  * \par Others
- *   
+ *
  */
 uint8_t MeRGBLineFollower::getADCValueRGB3(void)
 {
@@ -314,7 +314,7 @@ uint8_t MeRGBLineFollower::getADCValueRGB3(void)
  * \return
  *   The ADC value of RGB4
  * \par Others
- *   
+ *
  */
 uint8_t MeRGBLineFollower::getADCValueRGB4(void)
 {
@@ -333,7 +333,7 @@ uint8_t MeRGBLineFollower::getADCValueRGB4(void)
  * \return
  *   None
  * \par Others
- *  
+ *
  */
 void MeRGBLineFollower::setKp(float value)
 {
@@ -378,7 +378,7 @@ int16_t MeRGBLineFollower::getPositionOffset(void)
  * \par Output
  *   None
  * \return
- *   Position StateValue,0x00~0x0F,bit0-RGB1,bit1-RGB2 ,bit2-RGB3  ,bit3-RGB4 
+ *   Position StateValue,0x00~0x0F,bit0-RGB1,bit1-RGB2 ,bit2-RGB3  ,bit3-RGB4
  * \par Others
  *   |---------------------------|
      |      |      |      |      |
@@ -440,14 +440,14 @@ uint8_t MeRGBLineFollower::getStudyTypes(void)
  * \par Output
  *   None
  * \return
- *   
+ *
  * \par Others
  */
 void MeRGBLineFollower::updataAllSensorValue(void)
 {
   int8_t return_value;
   int16_t temp_positionOffset;
-  
+
   /* read data */
   return_value = readData(RGBLINEFOLLOWER_DEVICE_ID_ADDR, &i2cData[0], 8);
   if(return_value == I2C_OK)
@@ -466,7 +466,7 @@ void MeRGBLineFollower::updataAllSensorValue(void)
     }
     else
     {
-      iic_error_count++;  
+      iic_error_count++;
       //Serial.print("iic error:");
       //Serial.println(iic_error_count);
     }
@@ -609,7 +609,7 @@ int8_t MeRGBLineFollower::setBackgroundThreshold(uint8_t ch, uint8_t threshold)
   {
     return I2C_ERROR;
   }
-  
+
   return_value = writeReg(RGBLINEFOLLOWER_RGB1_BACKGROUND_THRESHOLD_ADDR + ch, data);
   return(return_value);
 }
@@ -648,7 +648,7 @@ int8_t MeRGBLineFollower::setTrackThreshold(uint8_t ch, uint8_t threshold)
   {
     return I2C_ERROR;
   }
-  
+
   return_value = writeReg(RGBLINEFOLLOWER_RGB1_TRACK_THRESHOLD_ADDR + ch, data);
   return(return_value);
 }
@@ -674,7 +674,7 @@ uint8_t MeRGBLineFollower::getBackgroundThreshold(uint8_t ch)
 {
   int8_t return_value = 0;
   uint8_t reg = RGBLINEFOLLOWER_RGB1_BACKGROUND_THRESHOLD_ADDR + ch;
-  
+
   if(ch <= RGB4_INDEX)
   {
     return_value = readData(reg, &i2cData[reg], 1);
@@ -685,7 +685,7 @@ uint8_t MeRGBLineFollower::getBackgroundThreshold(uint8_t ch)
     }
     return i2cData[reg];
   }
-  
+
   return 0;
 }
 
@@ -710,7 +710,7 @@ uint8_t MeRGBLineFollower::getTrackThreshold(uint8_t ch)
 {
   int8_t return_value = 0;
   uint8_t reg = RGBLINEFOLLOWER_RGB1_TRACK_THRESHOLD_ADDR + ch;
-  
+
   if(ch <= RGB4_INDEX)
   {
     return_value = readData(reg, &i2cData[reg], 1);
@@ -720,7 +720,7 @@ uint8_t MeRGBLineFollower::getTrackThreshold(uint8_t ch)
     }
     return i2cData[reg];
   }
-  
+
   return 0;
 }
 
@@ -834,7 +834,7 @@ int8_t MeRGBLineFollower::readData(uint8_t start, uint8_t *buffer, uint8_t size)
   {
     return(I2C_ERROR);
   }
-  return(0); //return: no error 
+  return(0); //return: no error
 }
 
 /**
@@ -866,14 +866,14 @@ int8_t MeRGBLineFollower::writeData(uint8_t start, const uint8_t *pData, uint8_t
 {
   int8_t return_value = 0;
   Wire.beginTransmission(Device_Address);
-  return_value = Wire.write(start); 
+  return_value = Wire.write(start);
   if(return_value != 1)
   {
     return(I2C_ERROR);
   }
-  Wire.write(pData, size);  
-  return_value = Wire.endTransmission(true); 
-  return(return_value); //return: no error                     
+  Wire.write(pData, size);
+  return_value = Wire.endTransmission(true);
+  return(return_value); //return: no error
 }
 
 /**
@@ -886,12 +886,12 @@ int8_t MeRGBLineFollower::writeData(uint8_t start, const uint8_t *pData, uint8_t
  * \par Output
  *	 None
  * \return
- *	 
+ *
  * \par Others
  */
 void MeRGBLineFollower::loop(void)
 {
-  if(millis() - updata_time > 8)  
+  if(millis() - updata_time > 8)
   {
     updata_time = millis();
     updataAllSensorValue();
