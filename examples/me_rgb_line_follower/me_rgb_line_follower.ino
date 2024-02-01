@@ -8,13 +8,6 @@ MeRGBLineFollower linefollower = MeRGBLineFollower(PORT_6, ADDRESS2);
 
 int16_t turnoffset = 0;
 int16_t set_speed = 50;
-/*
- * Orientation of the left motor relative to the robot
- *
- *  1: drive forward
- * -1: drive backward
- */
-int orientation = -1;
 
 void setup() {
   linefollower.begin();
@@ -26,6 +19,6 @@ void loop() {
 
   turnoffset = linefollower.getPositionOffset();
 
-  motor_l.forward(orientation * (set_speed - turnoffset));
-  motor_r.forward(orientation * -(set_speed + turnoffset));
+  motor_l.forward(set_speed + turnoffset);
+  motor_r.forward(-(set_speed - turnoffset));
 }
