@@ -59,9 +59,9 @@
  * Each time the result of the bitwise AND operation is greater 0 the Bit is
  * counted. In the above example the counted number is 3.
  *
- * A crossing may be detected if the number Bits is significantly greater than
+ * A crossing may be detected if the number Bits is significantly lesser than
  * the number of sensors covered by the line. Note, that the number of sensors
- * covered by the line is also greater if the Line Leader is at an angle to the
+ * covered by the line is also lesser if the Line Leader is at an angle to the
  * line.
  */
 #include <MeAuriga.h>
@@ -79,6 +79,7 @@ void loop() {
 
   linefollower.loop();
 
+  /* 4bit value, each set bit denotes sensor faces background */
   position = linefollower.getPositionState();
 
   /* line follower hase 4 sensors to check */
@@ -96,13 +97,14 @@ void loop() {
   Serial.print("Position state: ");
   Serial.println(position, BIN);
   Serial.print("Line width: ");
-  Serial.println(counter);
+  Serial.println(4 - counter);
 
   /**
-   * if the line normally covers 1 sensor, a counter of 3 or greater is most
+   * if the line normally covers 1 sensor, a counter of 1 or less is most
    * likely indicating a crossing
    */
-  if (counter > 2) {
+  if (counter < 2) {
     Serial.println("Looks like a crossing!");
   }
+  delay(200);
 }
