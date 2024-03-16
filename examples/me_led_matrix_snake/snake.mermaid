@@ -1,0 +1,10 @@
+---
+title: Snake
+---
+stateDiagram-v2
+  [*] --> Move
+  Move --> Crash: Hit Border
+  Move --> Crash: Hit Body
+  Move --> Grow: Eat Orb
+  Crash --> [*]: Reset
+  Grow --> Move
