@@ -226,7 +226,6 @@ void loop() {
 
   if (!(millis() % 600)) {
     printOrb();
-    drawMatrix();
     switch (state) {
       case MOVE:
         moveSnake();
@@ -246,5 +245,6 @@ void loop() {
         state = MOVE;
         break;
     }
+    drawMatrix();
   }
 }
