@@ -195,10 +195,25 @@ void loop() {
   key_pressed = button.pressed();
   switch (key_pressed) {
     case UP:
+      if (dir != DOWN) {
+        dir = key_pressed;
+      }
+      break;
     case DOWN:
+      if (dir != UP) {
+        dir = key_pressed;
+      }
+      break;
     case RIGHT:
+      if (dir != LEFT) {
+        dir = key_pressed;
+      }
+      break;
     case LEFT:
-      dir = key_pressed;
+      if (dir != RIGHT) {
+        dir = key_pressed;
+      }
+      break;
   }
 
   if (!(millis() % 300)) {
