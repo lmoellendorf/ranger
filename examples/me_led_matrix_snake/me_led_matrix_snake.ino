@@ -82,6 +82,122 @@ void score(size_t len, uint8_t bitmap[]) {
   }
 }
 
+void printOrb() {
+  Serial.print("Orb: ");
+  Serial.print(orb.x);
+  Serial.print(":");
+  Serial.println(orb.y);
+}
+
+void printSnakeBody(int x, int y) {
+  Serial.print("Snake: ");
+  Serial.print(x);
+  Serial.print(":");
+  Serial.println(y);
+}
+
+
+void moveSnake() {
+  /* move (only the old part of) the snake body into the latest direction */
+  for (int i = snake.len - 1; i > 0; i--) {
+    snake.body[i].x = snake.body[i - 1].x;
+    snake.body[i].y = snake.body[i - 1].y;
+  }
+  switch (dir) {
+    case UP:
+      Serial.println("UP");
+      snake.body[0].y++;
+      break;
+    case DOWN:
+      Serial.println("DOWN");
+      snake.body[0].y--;
+      break;
+    case RIGHT:
+      Serial.println("RIGHT");
+      snake.body[0].x++;
+      break;
+    case LEFT:
+      Serial.println("LEFT");
+      snake.body[0].x--;
+      break;
+    default:
+      Serial.println("INVALID");
+      break;
+  }
+}
+
+bool isCollision() {
+  /* detect collision with border */
+  if (snake.body[0].x < 0
+      || snake.body[0].x > 15
+      || snake.body[0].y < 0
+      || snake.body[0].y > 7) {
+    Serial.println("Snake hit border!");
+    return true;
+  }
+  /* detect collision with snake */
+  for (int i = 1; i < snake.len; i++) {
+    if (snake.body[0].x == snake.body[i].x
+        && snake.body[0].y == snake.body[i].y) {
+      Serial.println("Snake hit itself!");
+      return true;
+    }
+  }
+  return false;
+}
+
+bool reachedOrb() {
+  /* snake head reaches the orb */
+  if (snake.body[0].x == orb.x && snake.body[0].y == orb.y) {
+    return true;
+  }
+  return false;
+}
+
+void growSnake() {
+  bool orb_placed = false;
+
+  score(MATRIX_WIDTH, bitmap);
+  Serial.print("Snake ate ");
+  printOrb();
+  /* append a copy of the last element to the body */
+  snake.body[snake.len].x = snake.body[snake.len - 1].x;
+  snake.body[snake.len].y = snake.body[snake.len - 1].y;
+  snake.len++;
+  if (snake.len >= max_body_len) {
+    /* maximum length - reset game! */
+    score(MATRIX_WIDTH, bitmap);
+    resetSnake();
+  }
+  Serial.print("Snake length: ");
+  Serial.println(snake.len);
+  /* add a new orb */
+  while (!orb_placed) {
+    orb.x = random(0, MATRIX_WIDTH);
+    orb.y = random(0, MATRIX_HEIGHT);
+    orb_placed = true;
+    /* check if the orb is below the snake */
+    for (int i = 0; i < snake.len; i++) {
+      if (snake.body[i].x == orb.x && snake.body[i].y == orb.y)
+        orb_placed = false;
+    }
+  }
+  Serial.print("New ");
+  printOrb();
+}
+
+void drawMatrix() {
+  memset(bitmap, 0, MATRIX_WIDTH);
+  /* draw orb */
+  setPixel(orb.x, orb.y, MATRIX_WIDTH, bitmap);
+  /* draw snake */
+  for (int i = 0; i < snake.len; i++) {
+    setPixel(snake.body[i].x, snake.body[i].y, MATRIX_WIDTH, bitmap);
+    printSnakeBody(snake.body[i].x, snake.body[i].y);
+  }
+  matrix.drawBitmap(0, 0, MATRIX_WIDTH, bitmap);
+}
+
 void setup() {
   resetSnake();
   orb.x = random(0, MATRIX_WIDTH);
@@ -91,9 +207,7 @@ void setup() {
 
 void loop() {
   /* remember the current snake length */
-  int snake_len;
   uint8_t key_pressed;
-  bool orb_placed = false;
 
   key_pressed = button.pressed();
   switch (key_pressed) {
@@ -105,106 +219,19 @@ void loop() {
   }
 
   if (!(millis() % 600)) {
-    Serial.print("Orb: ");
-    Serial.print(orb.x);
-    Serial.print(":");
-    Serial.println(orb.y);
-    memset(bitmap, 0, MATRIX_WIDTH);
-    /* draw orb */
-    setPixel(orb.x, orb.y, MATRIX_WIDTH, bitmap);
-    /* draw snake */
-    for (int i = 0; i < snake.len; i++) {
-      setPixel(snake.body[i].x, snake.body[i].y, MATRIX_WIDTH, bitmap);
-      Serial.print("Snake: ");
-      Serial.print(snake.body[i].x);
-      Serial.print(":");
-      Serial.println(snake.body[i].y);
-    }
-    matrix.drawBitmap(0, 0, MATRIX_WIDTH, bitmap);
-
-    snake_len = snake.len;
+    printOrb();
+    drawMatrix();
     switch (state) {
       case MOVE:
-        /* move (only the old part of) the snake body into the latest direction */
-        for (int i = snake_len - 1; i > 0; i--) {
-          snake.body[i].x = snake.body[i - 1].x;
-          snake.body[i].y = snake.body[i - 1].y;
-        }
-        switch (dir) {
-          case UP:
-            Serial.println("UP");
-            snake.body[0].y++;
-            break;
-          case DOWN:
-            Serial.println("DOWN");
-            snake.body[0].y--;
-            break;
-          case RIGHT:
-            Serial.println("RIGHT");
-            snake.body[0].x++;
-            break;
-          case LEFT:
-            Serial.println("LEFT");
-            snake.body[0].x--;
-            break;
-          default:
-            Serial.println("INVALID");
-            break;
-        }
-        /* detect collision with border */
-        if (snake.body[0].x < 0
-            || snake.body[0].x > 15
-            || snake.body[0].y < 0
-            || snake.body[0].y > 7) {
-          Serial.println("Snake hit border!");
+        moveSnake();
+        if (isCollision())
           state = CRASH;
-        }
-        /* detect collision with snake */
-        for (int i = 1; i < snake.len; i++) {
-          if (snake.body[0].x == snake.body[i].x
-              && snake.body[0].y == snake.body[i].y) {
-            Serial.println("Snake hit itself!");
-            state = CRASH;
-          }
-        }
-        /* snake head reaches the orb */
-        if (snake.body[0].x == orb.x && snake.body[0].y == orb.y) {
+        else if (reachedOrb())
           state = GROW;
-        }
         break;
 
       case GROW:
-        score(MATRIX_WIDTH, bitmap);
-        Serial.print("Snake ate orb: ");
-        Serial.print(orb.x);
-        Serial.print(":");
-        Serial.println(orb.y);
-        /* append a copy of the last element to the body */
-        snake.body[snake.len].x = snake.body[snake.len - 1].x;
-        snake.body[snake.len].y = snake.body[snake.len - 1].y;
-        snake.len++;
-        if (snake.len >= max_body_len) {
-          /* maximum length - reset game! */
-          score(MATRIX_WIDTH, bitmap);
-          resetSnake();
-        }
-        Serial.print("Snake length: ");
-        Serial.println(snake.len);
-        /* add a new orb */
-        while (!orb_placed) {
-          orb.x = random(0, MATRIX_WIDTH);
-          orb.y = random(0, MATRIX_HEIGHT);
-          orb_placed = true;
-          /* check if the orb is below the snake */
-          for (int i = 0; i < snake.len; i++) {
-            if (snake.body[i].x == orb.x && snake.body[i].y == orb.y)
-              orb_placed = false;
-          }
-        }
-        Serial.print("New orb: ");
-        Serial.print(orb.x);
-        Serial.print(":");
-        Serial.println(orb.y);
+        growSnake();
         state = MOVE;
         break;
 
