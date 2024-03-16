@@ -40,6 +40,9 @@ struct snake snake;
 uint8_t dir = UP;
 uint8_t bitmap[MATRIX_WIDTH] = { 0 };
 int state = MOVE;
+int crash_counter = 0;
+int brightness = Brightness_8;
+bool score = false;
 
 void setPixel(int x, int y, size_t len, uint8_t bitmap[]) {
   if (!bitmap
@@ -57,29 +60,9 @@ void resetSnake(void) {
   snake.len = 1;
 }
 
-void gameOver(size_t len, uint8_t bitmap[]) {
-  for (int i = 0; i < 7; i++) {
-    matrix.setColorIndex(0);
-    matrix.drawBitmap(0, 0, MATRIX_WIDTH, bitmap);
-    delay(300);
-    matrix.setColorIndex(1);
-    matrix.drawBitmap(0, 0, MATRIX_WIDTH, bitmap);
-    delay(300);
-  }
+void gameOver() {
+  crash_counter = 7;
   resetSnake();
-}
-
-void score(size_t len, uint8_t bitmap[]) {
-  for (int i = Brightness_8; i >= 0; i--) {
-    matrix.setBrightness(i);
-    matrix.drawBitmap(0, 0, MATRIX_WIDTH, bitmap);
-    delay(60);
-  }
-  for (int i = 0; i < Brightness_8; i++) {
-    matrix.setBrightness(i);
-    matrix.drawBitmap(0, 0, MATRIX_WIDTH, bitmap);
-    delay(60);
-  }
 }
 
 void printOrb() {
@@ -157,7 +140,7 @@ bool reachedOrb() {
 void growSnake() {
   bool orb_placed = false;
 
-  score(MATRIX_WIDTH, bitmap);
+  score = true;
   Serial.print("Snake ate ");
   printOrb();
   /* append a copy of the last element to the body */
@@ -166,7 +149,7 @@ void growSnake() {
   snake.len++;
   if (snake.len >= max_body_len) {
     /* maximum length - reset game! */
-    score(MATRIX_WIDTH, bitmap);
+    score = true;
     resetSnake();
   }
   Serial.print("Snake length: ");
@@ -218,6 +201,29 @@ void loop() {
       dir = key_pressed;
   }
 
+  if (!(millis() % 300)) {
+    if (crash_counter > 0) {
+      matrix.setColorIndex(crash_counter % 2);
+      matrix.drawBitmap(0, 0, MATRIX_WIDTH, bitmap);
+      crash_counter--;
+      return;
+    }
+    matrix.setColorIndex(true);
+  }
+
+  if (!(millis() % 60)) {
+    if (score) {
+      matrix.setBrightness(--brightness);
+      matrix.drawBitmap(0, 0, MATRIX_WIDTH, bitmap);
+      if (brightness <= 0) {
+        score = false;
+      }
+    } else if (brightness < Brightness_8) {
+      matrix.setBrightness(++brightness);
+      matrix.drawBitmap(0, 0, MATRIX_WIDTH, bitmap);
+    }
+  }
+
   if (!(millis() % 600)) {
     printOrb();
     drawMatrix();
@@ -236,7 +242,7 @@ void loop() {
         break;
 
       case CRASH:
-        gameOver(MATRIX_WIDTH, bitmap);
+        gameOver();
         state = MOVE;
         break;
     }
