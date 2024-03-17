@@ -161,6 +161,8 @@ void loop() {
       matrix.drawBitmap(0, 0, MATRIX_WIDTH, bitmap);
       crash_counter--;
       if (!crash_counter) {
+        matrix.showNum(snake.len, 0);
+        delay(3000);
         matrix.setColorIndex(true);
         resetSnake();
       }
