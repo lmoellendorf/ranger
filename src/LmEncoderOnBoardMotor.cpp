@@ -12,10 +12,23 @@
 #include <math.h>
 #include <float.h>
 
+enum {
+  /* get new battery level */
+  NEW,
+  /* switch indicator LED on */
+  ON,
+  /* switch indicator LED off */
+  OFF,
+};
+
 MeEncoderOnBoard EncoderOnBoardMotor::encoder1(SLOT1);
 MeEncoderOnBoard EncoderOnBoardMotor::encoder2(SLOT2);
 bool EncoderOnBoardMotor::pos_reached[] = { false, false };
 bool EncoderOnBoardMotor::synced = false;
+bool EncoderOnBoardMotor::on = false;
+int EncoderOnBoardMotor::state = NEW;
+int EncoderOnBoardMotor::counter = 0;
+int EncoderOnBoardMotor::level = 0;
 
 void EncoderOnBoardMotor::isrProcessEncoder1(void)
 {
@@ -33,6 +46,41 @@ void EncoderOnBoardMotor::isrProcessEncoder2(void)
 		encoder2.pulsePosPlus();
 }
 
+void EncoderOnBoardMotor::indicateBatteryPower(void)
+{
+
+	switch (state) {
+		case NEW:
+			level = analogRead(A4);
+			/* dim exponentially */
+			level /= 10;
+			level *= level;
+			counter = level;
+			state = ON;
+			break;
+
+		case ON:
+			digitalWrite(13, HIGH);
+
+			if (counter <= 0) {
+				/* fully charged batteries are about ~500 */
+				counter = 600 - level;
+				state = OFF;
+			}
+			break;
+
+		case OFF:
+			digitalWrite(13, LOW);
+
+			if (counter <= 0) {
+				state = NEW;
+			}
+			break;
+	}
+
+	counter--;
+}
+
 EncoderOnBoardMotor::EncoderOnBoardMotor(int slot, float ratio) : slot(slot)
 {
 	//Set PWM 8KHz
@@ -41,6 +89,9 @@ EncoderOnBoardMotor::EncoderOnBoardMotor(int slot, float ratio) : slot(slot)
 
 	TCCR2A = _BV(WGM21) | _BV(WGM20);
 	TCCR2B = _BV(CS21);
+
+	pinMode(13, OUTPUT);
+	Timer::registerCallback(indicateBatteryPower);
 
 	switch (slot) {
 	case SLOT1:

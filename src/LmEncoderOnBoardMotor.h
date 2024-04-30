@@ -21,7 +21,8 @@ class EncoderOnBoardMotor
 	public:
 
 		/**
-		 * Constructor to assign one of the two onboard slots to a
+		 * Initialize the motor encoder and start a battery indicator
+		 * dimming the blue LED 13 according to battery power.
 		 *
 		 * @param slot  On board encoder slot to use
 		 * 		(SLOT1 is right, SLOT_2 is left)
@@ -104,6 +105,11 @@ class EncoderOnBoardMotor
 		static int slot2Index(int slot);
 		static MeEncoderOnBoard *slot2Encoder(int slot);
 		int slot;
+		static void indicateBatteryPower(void);
+		static bool on;
+		static int state;
+		static int counter;
+		static int level;
 };
 
 //! @cond SuppressGuard
