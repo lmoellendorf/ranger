@@ -53,8 +53,7 @@ void Timer::unregisterCallback(timer_cb callback)
 
 ISR(TIMER0_COMPA_vect)
 {
-	if ((Timer::counter++) % (8 * Timer::cb_count))
-		return;
+	Timer::counter++;
 
 	for (int cb = 0; cb < n_cb; cb++) {
 		if (!Timer::callbacks[cb])
