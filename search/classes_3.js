@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['nxttouch_52',['NxtTouch',['../classNxtTouch.html',1,'']]]
+  ['nxttouch_0',['NxtTouch',['../classNxtTouch.html',1,'']]]
 ];
